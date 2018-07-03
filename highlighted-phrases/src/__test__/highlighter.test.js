@@ -1,4 +1,4 @@
-const createWordMap = require('../highlighter');
+const createWordMap = require('../lib/highlighter');
 
 describe('HIGHLIGHTER Tests --- ', () => {
   test('CreateWordMap takes in a phrase map and correctly returns a word map where each key is a word and value is an array of the phrase\'s numbers that the key word is in, and there is a longestPhrase and shortestPhrase property...', () => {
