@@ -1,6 +1,8 @@
 'use strict';
 
-import spanWrapper from './span-wrapper';
+// import spanWrapper from './span-wrapper';
+
+console.log('hit highlighter');
 
 // Test to use a hashmap insde another hashmap
 // const selectorsMap = {
@@ -162,5 +164,5 @@ const createWordMap = (phraseMap, wordMap = {}) => {
   // - Stop when min phrase length - 1 away from end of sentence
     
   
-module.exports = createWordMap;
+// module.exports = createWordMap;
 // export { createWordMap }
