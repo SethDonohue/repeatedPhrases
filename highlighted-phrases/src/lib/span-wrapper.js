@@ -1,14 +1,23 @@
-
 // This module will grab the article text and wrap each word in a span
 
-const spanWrapper = {};
+  const allArticleParagraphs = document.querySelectorAll('.article-paragraph-target');
 
-spanWrapper.wrapOneWord = (word) => {
 
-}
+  const wordsWrapper = (paragraphNodeList) => {
+    // get the text inside the element
+  let paragraphWords = [];
+  paragraphNodeList.forEach(paragraph => {
+    //split text into words array
+    const words = paragraph.textContent.split(' ');
+    console.log(words);
+    // wrap each word in a <span>
 
-spanWrapper.allArticleParagraphs = () => document.querySelectorAll('.article-paragraph-target');
+    // join backtogether
+  
+    // set as innerHTML for paragraph?
 
-console.log(spanWrapper.allArticleParagraphs());
 
-// spanWrapper.
+  });
+  }
+
+  wordsWrapper(allArticleParagraphs);

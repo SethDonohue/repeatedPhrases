@@ -1,5 +1,5 @@
 'use strict';
 
-// import createWordMap from './lib/highlighter';
+import createWordMap from './lib/highlighter';
 
-console.log('Hello world');
+console.log('Hello world...');
