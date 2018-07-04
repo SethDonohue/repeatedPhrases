@@ -1,5 +1,7 @@
 'use strict';
 
+import spanWrapper from './span-wrapper';
+
 // Test to use a hashmap insde another hashmap
 // const selectorsMap = {
 //   sentenceOne : {
