@@ -1,4 +1,3 @@
-import spanWrapper from './span-wrapper';
 
 // Test to use a hashmap insde another hashmap
 // const selectorsMap = {
@@ -82,7 +81,7 @@ import spanWrapper from './span-wrapper';
 const inputString = 'I walked through the woods talked to me. The next week I walked through the woods the next week. The quick brown fox walked through the woods and talked to me. Another quick brown fox jumped over the lazy dog while the woods talked to me. The lazy dog walked through the woods the next week.';
 
 const phraseMapCHECKER = {
-  word: ['ohrases word is in'],
+  word: ['phrases word is in'],
   i: [1, 4],
   walked: [1, 7],
   through: [1, 7, 10],

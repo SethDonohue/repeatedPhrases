@@ -24,5 +24,5 @@ const wordMap = createWordMap(phraseList);
 const allArticleParagraphs = document.querySelectorAll('.article-paragraph-target');
 
 // Wrap each word in a span and update the dom
-spanWrapper(wordMap, allArticleParagraphs);
+spanWrapper.spanWrapAll(wordMap, allArticleParagraphs);
 

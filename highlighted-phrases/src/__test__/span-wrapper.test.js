@@ -1,4 +1,4 @@
-const spanFunctions = require('../lib/span-wrapper');
+const spanWrapper = require('../lib/span-wrapper');
 
 describe('SPAN WRAPPER --- ', () => {
   const mockWordMap = {
@@ -22,13 +22,12 @@ describe('SPAN WRAPPER --- ', () => {
   };
 
   test('classApplier takes a word map and a word and creates a string with the associated class names that the word is in from the word map.', () => {
-    expect(spanFunctions.classApplier(mockWordMap, 'fox')).toEqual('p-6 p-8');
-    expect(spanFunctions.classApplier(mockWordMap, 'the')).toEqual('p-1 p-2 p-4 p-5 p-6 p-7 p-9 p-10');
-    expect(spanFunctions.classApplier(mockWordMap, 'then')).toEqual('');
+    expect(spanWrapper.classApplier(mockWordMap, 'fox')).toEqual('p-6 p-8');
+    expect(spanWrapper.classApplier(mockWordMap, 'the')).toEqual('p-1 p-2 p-4 p-5 p-6 p-7 p-9 p-10');
+    expect(spanWrapper.classApplier(mockWordMap, 'then')).toEqual('');
   });
 
   test('spanWrapper takes in a Nodelist and and wraps each word in a <span> tag with the appropriate classes for which phrase it is in.', () => {
-    
     const mockNodeList = [
       {
         textContent: 'The quick brown fox jumped over the lazy dog The quick brown fox then jumped over the snoring cow.',
@@ -49,7 +48,7 @@ describe('SPAN WRAPPER --- ', () => {
       },
     ];
 
-    expect((spanFunctions.spanWrapper(mockWordMap, mockNodeList))[0]).toEqual(expectedOutputNodeList[0]);
+    expect((spanWrapper.spanWrapAll(mockWordMap, mockNodeList))[0]).toEqual(expectedOutputNodeList[0]);
     // expect((spanWrapper(mockNodeList)).longestPhraseLength).toEqual(expectedOutputNodeList.longestPhraseLength);
     // expect((spanWrapper(mockNodeList)).shortestPhraseLength).toEqual(expectedOutputNodeList.shortestPhraseLength);
   });
