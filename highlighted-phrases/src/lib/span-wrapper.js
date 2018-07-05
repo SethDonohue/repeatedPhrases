@@ -1,5 +1,6 @@
 // TODO: ADD classes to each of these spans depending on the wordMap
-//    - this needs to takein a wordMap to know what classes to add to each span before updating the DOM
+//    - this needs to takein a wordMap to know what classes to add
+//      to each span before updating the DOM
 
 const spanWrapper = {};
 

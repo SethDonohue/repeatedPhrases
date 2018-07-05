@@ -48,8 +48,6 @@ describe('SPAN WRAPPER --- ', () => {
       },
     ];
 
-    expect((spanWrapper.spanWrapAll(mockWordMap, mockNodeList))[0]).toEqual(expectedOutputNodeList[0]);
-    // expect((spanWrapper(mockNodeList)).longestPhraseLength).toEqual(expectedOutputNodeList.longestPhraseLength);
-    // expect((spanWrapper(mockNodeList)).shortestPhraseLength).toEqual(expectedOutputNodeList.shortestPhraseLength);
+    expect((spanWrapper.spanWrapAll(mockWordMap, mockNodeList))[0]).toEqual(expectedOutputNodeList[0]); //eslint-disable-line
   });
 });

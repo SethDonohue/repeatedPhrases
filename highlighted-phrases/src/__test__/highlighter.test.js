@@ -36,7 +36,7 @@ describe('HIGHLIGHTER --- ', () => {
     };
 
     expect((createWordMap(phrases)).woods).toEqual(expectedReturn.woods);
-    expect((createWordMap(phrases)).longestPhraseLength).toEqual(expectedReturn.longestPhraseLength);
-    expect((createWordMap(phrases)).shortestPhraseLength).toEqual(expectedReturn.shortestPhraseLength);
+    expect((createWordMap(phrases)).longestPhraseLength).toEqual(expectedReturn.longestPhraseLength); //eslint-disable-line
+    expect((createWordMap(phrases)).shortestPhraseLength).toEqual(expectedReturn.shortestPhraseLength); //eslint-disable-line
   });
 });
