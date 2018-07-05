@@ -1,6 +1,4 @@
-'use strict';
-
-import spanWrapper from './span-wrapper';
+import wordsWrapper from './span-wrapper';
 
 // Test to use a hashmap insde another hashmap
 // const selectorsMap = {
@@ -81,7 +79,7 @@ import spanWrapper from './span-wrapper';
 
 // Example Page
 
-const inputString = 'I walked through the woods talked to me. The next week I walked through the woods the next week. The quick brown fox walked through the woods and talked to me. Another quick brown fox jumped over the lazy dog while the woods talked to me. The lazy dog walked through the woods the next week.'
+const inputString = 'I walked through the woods talked to me. The next week I walked through the woods the next week. The quick brown fox walked through the woods and talked to me. Another quick brown fox jumped over the lazy dog while the woods talked to me. The lazy dog walked through the woods the next week.';
 
 const phraseList = {
   1: 'i walked through the woods',
@@ -98,69 +96,62 @@ const phraseList = {
 
 const phraseMapCHECKER = {
   word: ['ohrases word is in'],
-  'i': [1, 4],
-  'walked': [1, 7],
-  'through': [1, 7, 10],
-  'the': [1, 2, 4, 5, 6, 7, 9, 10],
-  'woods': [1, 2, 7, 10],
-  'lazy': [9],
+  i: [1, 4],
+  walked: [1, 7],
+  through: [1, 7, 10],
+  the: [1, 2, 4, 5, 6, 7, 9, 10],
+  woods: [1, 2, 7, 10],
+  lazy: [9],
 };
 
-const wordToPhraseMap ={
-  'i': [1],
-  'woods': [2,7],
-}
-
-// convert phrase list wordMap
-// phraseListKeys = Object.keys(phraseList);
-
-// const longestPhraseLength = 5;
-// const shortestPhraseLength = 3;
-
+const wordToPhraseMap = {
+  i: [1],
+  woods: [2, 7],
+};
 
 const createWordMap = (phraseMap, wordMap = {}) => {
-  wordMap['longestPhraseLength'] = 0;
-  wordMap['shortestPhraseLength'] = 100000;
+  wordMap.longestPhraseLength = 0;
+  wordMap.shortestPhraseLength = 100000;
 
   Object.keys(phraseMap).forEach(key => {
-    
     const parsedKey = parseInt(key, 10);
     const words = phraseMap[key].split(' ');
     // Check if phrase is longest and set it
-    if (words.length > wordMap.longestPhraseLength){
-      wordMap['longestPhraseLength'] = words.length;
+    if (words.length > wordMap.longestPhraseLength) {
+      wordMap.longestPhraseLength = words.length;
     }
     // Check if phrase is shortest and set it
-    if (words.length < wordMap.shortestPhraseLength){
-      wordMap['shortestPhraseLength'] = words.length;
+    if (words.length < wordMap.shortestPhraseLength) {
+      wordMap.shortestPhraseLength = words.length;
     }
 
     words.forEach(word => {
       if (!wordMap[word]) {
         wordMap[word] = [parsedKey];
-      } else {
-        if (!wordMap[word].includes(parsedKey)){
-          wordMap[word].push(parsedKey);
-        }
+      } else if (!wordMap[word].includes(parsedKey)) {
+        wordMap[word].push(parsedKey);
       }
-    })
+    });
   });
   return wordMap;
-}
+};
 
-// console.log('wordMap: ');
-// console.log(createWordMap(Object.keys(phraseList)));
+// Grab all the text associated with the chosen paragraphs
+const allArticleParagraphs = document.querySelectorAll('.article-paragraph-target');
+
+// Wrap each word in a span and update the dom
+wordsWrapper(allArticleParagraphs);
+
 
 // Notes
 
 // For Each sentence
 //   For Each word
 //   - Compare phrases word is in with next 4 neighrbors (4 comes from max possible phrase length - 1)
-  //  - Apply common phrases to all words
-  //  - Store seen phrases in map/array
-  //  - Move to next word
-  // - Stop when min phrase length - 1 away from end of sentence
+//  - Apply common phrases to all words
+//  - Store seen phrases in map/array
+//  - Move to next word
+// - Stop when min phrase length - 1 away from end of sentence
     
   
-// module.exports = createWordMap;
-// export { createWordMap }
+module.exports = createWordMap;
