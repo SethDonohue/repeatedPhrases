@@ -123,13 +123,6 @@ const createWordMap = (phraseMap, wordMap = {}) => {
   return wordMap;
 };
 
-// Grab all the text associated with the chosen paragraphs
-const allArticleParagraphs = document.querySelectorAll('.article-paragraph-target');
-
-// Wrap each word in a span and update the dom
-spanWrapper(allArticleParagraphs);
-
-
 // Notes
 
 // For Each sentence
@@ -139,6 +132,7 @@ spanWrapper(allArticleParagraphs);
 //  - Store seen phrases in map/array
 //  - Move to next word
 // - Stop when min phrase length - 1 away from end of sentence
-    
+
+// TODO: Break the paragraph text into a sentence array
   
 module.exports = createWordMap;

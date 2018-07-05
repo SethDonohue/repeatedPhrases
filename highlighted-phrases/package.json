@@ -4,7 +4,7 @@
   "description": "challenge for textio",
   "scripts": {
     "test": "jest -i --coverage",
-    "testWatchAll": "jest -i --coverage --watchAll",
+    "testWatchAll": "jest -i --watchAll",
     "testWatch": "jest -i --coverage --watch"
   },
   "author": "Seth Donohue",

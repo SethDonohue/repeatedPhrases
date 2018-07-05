@@ -1,6 +1,7 @@
 'use strict';
 
 import createWordMap from './lib/highlighter';
+import spanWrapper from './lib/span-wrapper';
 
 console.log('Hello world...');
 
@@ -17,4 +18,11 @@ const phraseList = {
   10: 'through the woods talked',
 };
 
-console.log(createWordMap(phraseList));
+const wordMap = createWordMap(phraseList);
+
+// Grab all the text associated with the chosen paragraphs
+const allArticleParagraphs = document.querySelectorAll('.article-paragraph-target');
+
+// Wrap each word in a span and update the dom
+spanWrapper(wordMap, allArticleParagraphs);
+
