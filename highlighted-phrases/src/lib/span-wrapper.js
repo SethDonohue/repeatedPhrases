@@ -1,5 +1,5 @@
 
-const wordsWrapper = (paragraphNodeList) => {
+const spanWrapper = (paragraphNodeList) => {
   // get the text inside the element
   paragraphNodeList.forEach(paragraph => {
     // split text into words array
@@ -15,4 +15,4 @@ const wordsWrapper = (paragraphNodeList) => {
   return paragraphNodeList; // This return is strictly here for testing
 };
 
-module.exports = wordsWrapper;
+module.exports = spanWrapper;

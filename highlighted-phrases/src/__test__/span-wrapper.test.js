@@ -1,7 +1,7 @@
 const spanWrapper = require('../lib/span-wrapper');
 
 describe('SPAN WRAPPER --- ', () => {
-  test('wordsWrapper takes in a Nodelist and and wraps each word in a <span> tag.', () => {
+  test('spanWrapper takes in a Nodelist and and wraps each word in a <span> tag.', () => {
     const mockNodeList = [
       {
         textContent: 'The quick brown fox jumped over the lazy dog The quick brown fox then jumped over the snoring cow.',

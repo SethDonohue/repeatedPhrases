@@ -1,4 +1,4 @@
-import wordsWrapper from './span-wrapper';
+import spanWrapper from './span-wrapper';
 
 // Test to use a hashmap insde another hashmap
 // const selectorsMap = {
@@ -81,19 +81,6 @@ import wordsWrapper from './span-wrapper';
 
 const inputString = 'I walked through the woods talked to me. The next week I walked through the woods the next week. The quick brown fox walked through the woods and talked to me. Another quick brown fox jumped over the lazy dog while the woods talked to me. The lazy dog walked through the woods the next week.';
 
-const phraseList = {
-  1: 'i walked through the woods',
-  2: 'the woods talked to me',
-  3: 'talked to me',
-  4: 'the next week i',
-  5: 'the next week',
-  6: 'the quick brown fox',
-  7: 'walked through the woods',
-  8: 'quick brown fox',
-  9: 'the lazy dog',
-  10: 'through the woods talked',
-};
-
 const phraseMapCHECKER = {
   word: ['ohrases word is in'],
   i: [1, 4],
@@ -140,7 +127,7 @@ const createWordMap = (phraseMap, wordMap = {}) => {
 const allArticleParagraphs = document.querySelectorAll('.article-paragraph-target');
 
 // Wrap each word in a span and update the dom
-wordsWrapper(allArticleParagraphs);
+spanWrapper(allArticleParagraphs);
 
 
 // Notes
