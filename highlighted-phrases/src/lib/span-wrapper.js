@@ -31,7 +31,7 @@ spanWrapper.spanWrapAll = (wordMap, paragraphNodeList) => {
       const classString = spanWrapper.classApplier(wordMap, word);
       let tempHTML = '';
       if (classString.length > 0) {
-        tempHTML = `<span class="${classString}">${word}</span>`;
+        tempHTML = `<span class="phrase-word ${classString}">${word}</span>`;
       } else {
         tempHTML = `<span>${word}</span>`;
       }
