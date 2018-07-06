@@ -11,3 +11,11 @@
 // TODO: Break the paragraph text into a sentence array
   
 // add mouseover event listener to each span with class of phrase-word
+const highlighter = {};
+
+highlighter.grabClassNames = (event) => {
+  const classList = event.target.className;
+  console.log('CLASSLIST: ', classList);
+};
+
+module.exports = highlighter;

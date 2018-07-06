@@ -1,12 +1,12 @@
 'use strict';
 
 import createWordMap from './lib/word-map';
-// import createWordMap from './lib/highlighter';
+import highlighter from './lib/highlighter';
 import spanWrapper from './lib/span-wrapper';
 
 console.log('Hello world...');
 
-const phraseList = {
+const phraseMap = {
   1: 'i walked through the woods',
   2: 'the woods talked to me',
   3: 'talked to me',
@@ -19,11 +19,18 @@ const phraseList = {
   10: 'through the woods talked',
 };
 
-const wordMap = createWordMap(phraseList);
+const wordMap = createWordMap(phraseMap);
 
-// Grab all the text associated with the chosen paragraphs
+// Get all the text associated with the chosen paragraphs
+//  and wrap each word in a span with classes corresponding
+//  to the phrases it is in and update the dom
 const allArticleParagraphs = document.querySelectorAll('.article-paragraph-target');
-
-// Wrap each word in a span and update the dom
 spanWrapper.spanWrapAll(wordMap, allArticleParagraphs);
 
+// Get all spans with the phrase-word class and add and
+//  event listener to them
+const phraseWordElements = document.querySelectorAll('.phrase-word');
+
+phraseWordElements.forEach(element => {
+  element.addEventListener('mouseover', highlighter.grabClassNames);
+});
