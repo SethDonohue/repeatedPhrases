@@ -1,6 +1,7 @@
 'use strict';
 
-import createWordMap from './lib/highlighter';
+import createWordMap from './lib/word-map';
+// import createWordMap from './lib/highlighter';
 import spanWrapper from './lib/span-wrapper';
 
 console.log('Hello world...');
