@@ -6,7 +6,7 @@ const createWordMap = (phraseMap, wordMap = {}) => {
 
   Object.keys(phraseMap).forEach(key => {
     const parsedKey = parseInt(key, 10);
-    const words = phraseMap[key].split(' ');
+    const words = phraseMap[key].phrase.split(' ');
     // Check if phrase is longest and set it
     if (words.length > wordMap.longestPhraseLength) {
       wordMap.longestPhraseLength = words.length;
@@ -24,6 +24,7 @@ const createWordMap = (phraseMap, wordMap = {}) => {
       }
     });
   });
+  console.log(wordMap);
   return wordMap;
 };
 

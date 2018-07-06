@@ -14,8 +14,19 @@
 const highlighter = {};
 
 highlighter.grabClassNames = (event) => {
-  const classList = event.target.className;
-  console.log('CLASSLIST: ', classList);
+  const classArray = event.target.className.split(' ');
+  return classArray;
 };
+
+// highlighter.compareNeighbors = (sentences) => {
+//   sentence.split(' ');
+//   sentence.forEach(element => {
+    
+//   });
+// }
+
+// highlighter.prioritizeClasses = () => {
+//   // sort class by
+// }
 
 module.exports = highlighter;
