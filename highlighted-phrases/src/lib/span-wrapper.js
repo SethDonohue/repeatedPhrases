@@ -2,7 +2,6 @@
 //    - this needs to takein a wordMap to know what classes to add
 //      to each span before updating the DOM
 import $ from 'jquery';
-import { WSAEPROVIDERFAILEDINIT } from 'constants';
 
 const spanWrapper = {};
 

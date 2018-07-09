@@ -6,18 +6,23 @@
     <title></title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="">
+    <link rel="stylesheet" href="./style.css">
   </head>
   <body>
     <main>
       <div id="hightlighter-target">
-
+        <p>test div to be removed by controller.highlightRender method</p>
+      </div>
+      <div class="test-target">
+        <p><span class="red-list">Second test</span> div <span class="purple-list">NOT</span> to be <span class="grey-list">removed</span> by <span class="blue-list">controller</span><span class="red-list blue-list">highlightRender</span> <span class="green-list">method</span></p>
       </div>
       <article>
         <h2>Test Article with Phrases </h2>
-          <p class="article-paragraph-target">The quick brown fox jumped over the lazy dog, The quick brown fox then jumped over the snoring cow. The quick brown fox jumped over the lazy dog, The quick brown fox then jumped over the snoring cow.</p>
-          <p class="article-paragraph-target">The quick brown fox jumped over the lazy dog The quick brown fox then jumped over the snoring elphant.</p>
-          <p class="article-paragraph-target">The quick brown fox jumped over the lazy dog The quick brown fox then jumped over the snoring cat.</p>
+          <div class="test-target">
+            <p class="article-paragraph-target">The quick brown fox jumped over the lazy dog, The quick brown fox then jumped over the snoring cow. The quick brown fox jumped over the lazy dog, The quick brown fox then jumped over the snoring cow.</p>
+            <p class="article-paragraph-target">The quick brown fox jumped over the lazy dog The quick brown fox then jumped over the snoring elphant.</p>
+            <p class="article-paragraph-target">The quick brown fox jumped over the lazy dog The quick brown fox then jumped over the snoring cat.</p>
+          </div>
           <p>
             The quick brown fox jumped over the lazy dog The quick brown fox then jumped over the snoring turtle.
           </p>

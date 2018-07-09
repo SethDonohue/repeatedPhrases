@@ -5,6 +5,7 @@ export default class Controller {
     this.divTarget = div;
     this.wordLists = wordLists;
     this.wordMap = {};
+    this.classesToApply = [];
   }
 
   createWordMap(wordLists) {
@@ -21,15 +22,98 @@ export default class Controller {
         });
       });
     });
-    console.log(this.wordMap);
+    console.log('Word Map: ', this.wordMap);
   }
 
+  // createPhraseWordsArray(inputString) {
+  //   const stringPhraseWordsArray = {};
+  //   const words = inputString.match(/\w+|[^w]/g);
 
-  highlightRender(string) {
+  //   // Loop through words array to apply <span>'s depending on if they are in a phrase or not
+  //   for (let i = 0; i < words.length; i++) {
+
+  //   }
+    
+  //   words.forEach(word => {
+  //     if (this.wordMap[word.toLowerCase()]) {
+  //       if (stringPhraseWordsArray.length > 0) {
+  //         stringPhraseWordsArray[word].push(this.wordMap[word.toLowerCase()]);
+  //       } else {
+  //         stringPhraseWordsArray[word] = [].push(this.wordMap[word.toLowerCase()]);
+  //       }
+  //     }
+  //   });
+  //   console.log('Current String Array: ', stringPhraseWordsArray);
+  // }
+
+  // TODO: Refactor this to handle different inputs
+  // TODO: ASK. should everyword be wrapped in a span?
+  compareNeighbors(inputString) {
+    const classesToApply = [];
+    const words = inputString.match(/[\w'-]+|[^w]/g);
+    // const words = inputString.match(/(?=\S*['-])([a-zA-Z'-]+)/g);
+    // const words = inputString.match(/\b\w*['-]\w*\b/g);
+
+    // Loop through words array to apply <span>'s depending on if they are in a phrase or not
+    for (let i = 0; i < words.length; i++) {
+      const currWord = words[i];
+      if (this.wordMap[currWord]) {
+        console.log('Word Phrases: ', this.wordMap[currWord]);
+        const currPhrases = this.wordMap[currWord];
+        if (currPhrases.length === 1) {
+          // apply the class now!
+          words[i] = `<span class="${currPhrases[0]}">${words[i]}</span>`;
+        } else {
+          for (let j = 0; j < currPhrases.length; j++) {
+            const currPhraseColor = this.wordMap[currWord][j];
+            console.log(currPhraseColor);
+            // if (classesToApply[i].includes(currPhraseColor)) break;
+            // let flag = true;
+            //   for (let k = i + 1; k < LENGTH OF CURRENT PHRASE; k++){
+                
+            //   }
+            // }
+          }
+        }
+      } else if (!(words[i] === ' ')) {
+        words[i] = `<span>${words[i]}</span>`;
+      }
+    }
+    // take these words and join them back together
+    console.log(words);
+    const resultHTML = words.join('');
+    console.log(resultHTML);
+    return resultHTML;
+  }
+  //   for (let i = 0; i < phraseWordsArray.length; i++) {
+  //     for (let j = 0; j < phraseWordsArray[i].length; j++) {
+  //       const currPhrase = phraseWordsArray[i][j];
+  //       if (appliedPhrases[i].includes(currPhrase)) break;
+  //       let flag = true;
+  //       for (let k = i + 1; k < phraseMap[currPhrase].length; k++) {
+  //         if (!(phraseWordsArray[k].includes(currPhrase))) {
+  //           flag = false;
+  //           break;
+  //         }
+  //       }
+  //       if (flag) {
+  //         for (let k = i; k < phraseMap[currPhrase].length; k++) {
+  //           appliedPhrases[k].push(currPhrase);
+  //         }
+  //       }
+  //     }
+  //   }
+  //   return appliedPhrases;
+  // };
+
+  highlightRender(inputString) {
+    this.createWordMap(this.wordLists);
+    const newHTML = this.compareNeighbors(inputString);
+    console.log(newHTML);
     // Erase Previous render to this.divTarget
     const targetElement = document.getElementById(this.divTarget); // assuming the div is an #id
-    targetElement.innerHTML = ''; // is this the most efficient or fastest way to clear a div?
-    
+    // targetElement.innerHTML = ''; // is this the most efficient or fastest way to clear a div?
+    targetElement.innerHTML = newHTML;
     // Render NEW text with highlights
 
     // Compare string to word list

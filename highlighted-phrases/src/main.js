@@ -67,37 +67,39 @@ console.log('Hello world...');
 
 // Test Input
 const testWordLists = {
-  redList: [
+  'red-list': [
     'action-oriented',
     'alarming',
     'candidates',
     'leave',
     'do not want',
   ],
-  greenList: [
+  'green-list': [
     'adorable',
     'creative',
     'love',
     'new technology',
   ],
-  blueList: [
+  'blue-list': [
     'an adorable puppy',
     'aggressive',
     'arm',
     'very unlikely',
   ],
-  purpleList: [
+  'purple-list': [
     'do not cross',
     'log file',
     'our team',
     'radio',
   ],
-  greyList: [
+  'grey-list': [
     'very unlikely to leave',
     'will deliver new',
   ],
 };
 
+const testString = 'I\'m very unlikely to leave an adorable puppy. We do not want alarming or aggressive candidates, our candidates should be action-oriented otherwise they\'ll be asked to leave. Here we are creative, love new technology, and our arm is very unlikely to go-to radio! We do not cross our team with a log file and we deliver new technology with love and we are adorable.';
+
 const controllerOne = new Controller('hightlighter-target', testWordLists);
 
-const wordMap = controllerOne.createWordMap(testWordLists);
+controllerOne.highlightRender(testString);
