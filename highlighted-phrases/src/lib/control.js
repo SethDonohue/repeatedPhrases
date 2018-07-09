@@ -58,15 +58,16 @@ export default class Controller {
     for (let i = 0; i < words.length; i++) {
       const currWord = words[i];
       if (this.wordMap[currWord]) {
-        console.log('Word Phrases: ', this.wordMap[currWord]);
         const currPhrases = this.wordMap[currWord];
         if (currPhrases.length === 1) {
           // apply the class now!
           words[i] = `<span class="${currPhrases[0]}">${words[i]}</span>`;
         } else {
+          console.log('Curr Color:');
           for (let j = 0; j < currPhrases.length; j++) {
             const currPhraseColor = this.wordMap[currWord][j];
             console.log(currPhraseColor);
+            
             // if (classesToApply[i].includes(currPhraseColor)) break;
             // let flag = true;
             //   for (let k = i + 1; k < LENGTH OF CURRENT PHRASE; k++){
@@ -80,9 +81,7 @@ export default class Controller {
       }
     }
     // take these words and join them back together
-    console.log(words);
     const resultHTML = words.join('');
-    console.log(resultHTML);
     return resultHTML;
   }
   //   for (let i = 0; i < phraseWordsArray.length; i++) {
@@ -109,7 +108,6 @@ export default class Controller {
   highlightRender(inputString) {
     this.createWordMap(this.wordLists);
     const newHTML = this.compareNeighbors(inputString);
-    console.log(newHTML);
     // Erase Previous render to this.divTarget
     const targetElement = document.getElementById(this.divTarget); // assuming the div is an #id
     // targetElement.innerHTML = ''; // is this the most efficient or fastest way to clear a div?
