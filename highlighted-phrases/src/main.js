@@ -103,3 +103,5 @@ const testString = 'I\'m very unlikely to leave an adorable puppy. We do not wan
 const controllerOne = new Controller('hightlighter-target', testWordLists);
 
 controllerOne.highlightRender(testString);
+
+// console.log(document.getElementById('child-nodes-test').childNodes);

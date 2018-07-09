@@ -1,11 +1,12 @@
 // Main Controller
+// TODO: REFACTOR ALL OF THIS to work with the childNodes of the
+//  given div properly as it contains the text nodes!
 
 export default class Controller {
   constructor(div, wordLists) {
     this.divTarget = div;
     this.wordLists = wordLists;
     this.wordMap = {};
-    this.classesToApply = [];
   }
 
   createWordMap(wordLists) {
@@ -19,29 +20,32 @@ export default class Controller {
       }
     };
 
-    const addFlagToWordMap = (word, flag = false) => {
-      this.wordMap[word.toLowerCase()].oneWord = flag;
+    // Add a flag to help determine if word is NOT in a phrase
+    const addFlagToWordMap = (word, length = 1) => {
+      const currLength = this.wordMap[word.toLowerCase()].maxPossibleLength;
+      if (currLength) {
+        if (length > currLength) {
+          this.wordMap[word.toLowerCase()].maxPossibleLength = length;
+        }
+      } else {
+        this.wordMap[word.toLowerCase()].maxPossibleLength = length;
+      }
     };
 
     Object.keys(wordLists).forEach(colorList => {
       wordLists[colorList].forEach(string => {
         // TODO: may need to handle punctuation here?
-        if (!string.includes(' ')) {
+        const words = string.split(' ');
+
+        if (words.length < 2) {
           // Has No spaces so must be one word, hyphenated, or has an apostrophy.
-          // Skip the loop and add it to the map as well as a flag that it is not in a phrase in the list
           addColorToWordMap(string, colorList);
-          addFlagToWordMap(string, true);
+          addFlagToWordMap(string);
         } else {
           // String is multiple words so add each part to the wordMap
-          const words = string.split(' ');
           words.forEach(word => {
             addColorToWordMap(word, colorList);
-            addFlagToWordMap(word);
-            // if (!this.wordMap[word.toLowerCase()]) {
-            //   this.wordMap[word.toLowerCase()].colors = [colorList];
-            // } else if (!this.wordMap[word].includes(colorList)) {
-            //   this.wordMap[word.toLowerCase()].push(colorList);
-            // }
+            addFlagToWordMap(word, words.length);
           });
         }
       });
@@ -72,52 +76,56 @@ export default class Controller {
 
   // TODO: Refactor this to handle different inputs
   // TODO: ASK. should everyword be wrapped in a span?
-  // compareNeighbors(inputString) {
-  //   const classesToApply = [];
-  //   const words = inputString.match(/[\w'-]+|[^w]/g);
-  //   // const words = inputString.match(/(?=\S*['-])([a-zA-Z'-]+)/g);
-  //   // const words = inputString.match(/\b\w*['-]\w*\b/g);
+  compareNeighbors(inputString) {
+    const classesToApply = [];
+    const words = inputString.match(/[\w'-]+|[^w]/g);
+    // const words = inputString.match(/(?=\S*['-])([a-zA-Z'-]+)/g);
+    // const words = inputString.match(/\b\w*['-]\w*\b/g);
 
-  //   // Loop through words array to apply <span>'s depending on if they are in a phrase or not
-  //   for (let i = 0; i < words.length; i++) {
-  //     const currWord = words[i];
-  //     if (this.wordMap[currWord]) {
-  //       const currPhrases = this.wordMap[currWord];
-  //       if (currPhrases.length === 1) {
-  //         // apply the class now!
-  //         words[i] = `<span class="${currPhrases[0]}">${words[i]}</span>`;
-  //       } else {
-  //         console.log('Curr Color:');
-  //         for (let j = 0; j < currPhrases.length; j++) {
-  //           const currPhraseColor = this.wordMap[currWord][j];
-  //           console.log(currPhraseColor);
-  //           // if (classesToApply[i].includes(currPhraseColor)) break;
-  //           // let flag = true;
-  //           //   for (let k = i + 1; k < LENGTH OF CURRENT PHRASE; k++){
+    // Loop through words array to apply <span>'s depending on if they are in a phrase or not
+    for (let i = 0; i < words.length; i++) {
+      const currWord = words[i];
+      if (this.wordMap[currWord]) {
+        const currPhrases = this.wordMap[currWord].colors;
+        if (currPhrases.length === 1 && this.wordMap[currWord].oneWord) {
+          words[i] = `<span class="${currPhrases[0]}">${words[i]}</span>`;
+        } else {
+          console.log('Curr Color:');
+          for (let j = 0; j < currPhrases.length; j++) {
+            const currPhraseColor = this.wordMap[currWord].colors[j];
+            console.log(currPhraseColor);
 
-  //           //   }
+            // This begins the look ahead logic to determine if a word is
+            // in a phrase and which classes should be applied to it
+            // based on the next words in the words array.
+            // if (classesToApply[i].includes(currPhraseColor)) break;
+            // let flag = true;
+            //   for (let k = i + 1; k < LENGTH OF CURRENT PHRASE; k++){
+
+            //   }
 
 
-  //           // if (i === 0) {
-  //           //   // then add on the LEFT class and color
-  //           // }
-  //           // if (!(i === 0) || !(i === currPhrases.length - 1)) {
-  //           //   // add the MIDDLE class and Color
-  //           // }
-  //           // if (i === currPhrases.length - 1) {
-  //           //   // add RIGHT class and Color
-  //           // }
-  //           // }
-  //         }
-  //       }
-  //     } else if (!(words[i] === ' ')) {
-  //       words[i] = `<span>${words[i]}</span>`;
-  //     }
-  //   }
-  //   // take these words and join them back together
-  //   const resultHTML = words.join('');
-  //   return resultHTML;
-  // }
+            // if (i === 0) {
+            //   // then add on the LEFT class and color
+            // }
+            // if (!(i === 0) || !(i === currPhrases.length - 1)) {
+            //   // add the MIDDLE class and Color
+            // }
+            // if (i === currPhrases.length - 1) {
+            //   // add RIGHT class and Color
+            // }
+            // }
+          }
+        }
+      } else if (!(words[i] === ' ')) {
+        words[i] = `<span>${words[i]}</span>`;
+      }
+    }
+    // take these words and join them back together
+    const resultHTML = words.join('');
+    return resultHTML;
+  }
+
   //   for (let i = 0; i < phraseWordsArray.length; i++) {
   //     for (let j = 0; j < phraseWordsArray[i].length; j++) {
   //       const currPhrase = phraseWordsArray[i][j];
