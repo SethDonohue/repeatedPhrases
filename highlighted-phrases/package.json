@@ -5,7 +5,9 @@
   "scripts": {
     "test": "jest -i --coverage",
     "testWatchAll": "jest -i --watchAll",
-    "testWatch": "jest -i --coverage --watch"
+    "testWatch": "jest -i --coverage --watch",
+	"babelWatch": "sudo npx babel src --out-dir build --watch --copy-files",
+	"watchify": "sudo npx watchify build/main.js -o build/bundle.js"
   },
   "author": "Seth Donohue",
   "devDependencies": {

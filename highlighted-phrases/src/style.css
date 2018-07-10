@@ -8,6 +8,11 @@
   --primary-blue-highlight: #90d8f0;
   --primary-purple-highlight: plum;
   --primary-grey-highlight: #e8e8e8;
+  --grey-z-index: -5;
+  --purple-z-index: -4;
+  --blue-z-index: -3;
+  --green-z-index: -2;
+  --red-z-index: -1;
 }
 
 span{
@@ -19,7 +24,15 @@ span{
   position: relative;
 }
 
-.grey-list{
+.grey-list:before{
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--grey-z-index);
+  border-radius: var(--highlighted-border-radius);
   background-color: var(--primary-grey-highlight);
 }
 
@@ -30,7 +43,7 @@ span{
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: -1;
+  z-index: var(--grey-z-index);
   border-radius: var(--highlighted-border-radius);
   box-shadow: 10px 0 0px 0px var(--primary-grey-highlight);
 }
@@ -42,7 +55,7 @@ span{
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: -1;
+  z-index: var(--grey-z-index);
   border-radius: var(--highlighted-border-radius);
   box-shadow: -10px 0 0px 0px var(--primary-grey-highlight);
 }
@@ -54,7 +67,7 @@ span{
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: -1;
+  z-index: var(--grey-z-index);
   border-radius: var(--highlighted-border-radius);
   box-shadow: -10px 0 0px 0px var(--primary-grey-highlight), 10px 0 0px 0px var(--primary-grey-highlight);
 }
@@ -70,7 +83,7 @@ span{
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: -1;
+  z-index: var(--purple-z-index);
   border-radius: var(--highlighted-border-radius);
   box-shadow: 10px 0 0px 0px var(--primary-purple-highlight);
 }
@@ -82,7 +95,7 @@ span{
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: -1;
+  z-index:var(--purple-z-index);
   border-radius: var(--highlighted-border-radius);
   box-shadow: -10px 0 0px 0px var(--primary-purple-highlight);
 }
@@ -94,7 +107,7 @@ span{
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: -1;
+  z-index:var(--purple-z-index);
   border-radius: var(--highlighted-border-radius);
   box-shadow: -10px 0 0px 0px var(--primary-purple-highlight), 10px 0 0px 0px var(--primary-purple-highlight);
 }
@@ -110,7 +123,7 @@ span{
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: -1;
+  z-index: var(--blue-z-index);
   border-radius: var(--highlighted-border-radius);
   box-shadow: 10px 0 0px 0px var(--primary-blue-highlight);
 }
@@ -122,7 +135,7 @@ span{
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: -1;
+  z-index: var(--blue-z-index);
   border-radius: var(--highlighted-border-radius);
   box-shadow: -10px 0 0px 0px var(--primary-blue-highlight);
 }
@@ -134,7 +147,7 @@ span{
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: -1;
+  z-index: var(--blue-z-index);
   border-radius: var(--highlighted-border-radius);
   box-shadow: -10px 0 0px 0px var(--primary-blue-highlight), 10px 0 0px 0px var(--primary-blue-highlight);
 }
@@ -150,7 +163,7 @@ span{
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: -1;
+  z-index: var(--green-z-index);
   border-radius: var(--highlighted-border-radius);
   box-shadow: 10px 0 0px 0px var(--primary-green-highlight);
 }
@@ -162,7 +175,7 @@ span{
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: -1;
+  z-index: var(--green-z-index);
   border-radius: var(--highlighted-border-radius);
   box-shadow: -10px 0 0px 0px var(--primary-green-highlight);
 }
@@ -174,7 +187,7 @@ span{
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: -1;
+  z-index: var(--green-z-index);
   border-radius: var(--highlighted-border-radius);
   box-shadow: -10px 0 0px 0px var(--primary-green-highlight), 10px 0 0px 0px var(--primary-green-highlight);
 }
@@ -190,7 +203,7 @@ span{
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: -1;
+  z-index: var(--red-z-index);
   border-radius: var(--highlighted-border-radius);
   box-shadow: 10px 0 0px 0px var(--primary-red-highlight);
 }
@@ -202,7 +215,7 @@ span{
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: -1;
+  z-index: var(--red-z-index);
   border-radius: var(--highlighted-border-radius);
   box-shadow: -10px 0 0px 0px var(--primary-red-highlight);
 }
@@ -214,7 +227,7 @@ span{
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: -1;
+  z-index: var(--red-z-index);
   border-radius: var(--highlighted-border-radius);
   box-shadow: -10px 0 0px 0px var(--primary-red-highlight), 10px 0 0px 0px var(--primary-red-highlight);
 }

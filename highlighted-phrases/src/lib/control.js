@@ -14,21 +14,22 @@ export default class Controller {
       if (!this.wordMap[word.toLowerCase()]) {
         this.wordMap[word.toLowerCase()] = {};
         this.wordMap[word.toLowerCase()].colors = [associatedColor];
-      } else if (!this.wordMap[word].colors.includes(associatedColor)) {
+      } else if (!this.wordMap[word.toLowerCase()].colors.includes(associatedColor)) {
         // If the color array in wordMap does not already include the color add it
         this.wordMap[word.toLowerCase()].colors.push(associatedColor);
       }
     };
 
     // Add a flag to help determine if word is NOT in a phrase
-    const addFlagToWordMap = (word, length = 1) => {
-      const currLength = this.wordMap[word.toLowerCase()].maxPossibleLength;
+    const addLengthToWordMap = (colorList, word, length = 1) => {
+      const newProperty = `${colorList}Length`;
+      const currLength = this.wordMap[word.toLowerCase()][newProperty];
       if (currLength) {
         if (length > currLength) {
-          this.wordMap[word.toLowerCase()].maxPossibleLength = length;
+          this.wordMap[word.toLowerCase()][newProperty] = length;
         }
       } else {
-        this.wordMap[word.toLowerCase()].maxPossibleLength = length;
+        this.wordMap[word.toLowerCase()][newProperty] = length;
       }
     };
 
@@ -40,12 +41,12 @@ export default class Controller {
         if (words.length < 2) {
           // Has No spaces so must be one word, hyphenated, or has an apostrophy.
           addColorToWordMap(string, colorList);
-          addFlagToWordMap(string);
+          addLengthToWordMap(colorList, string);
         } else {
           // String is multiple words so add each part to the wordMap
           words.forEach(word => {
             addColorToWordMap(word, colorList);
-            addFlagToWordMap(word, words.length);
+            addLengthToWordMap(colorList, word, words.length);
           });
         }
       });
@@ -77,50 +78,157 @@ export default class Controller {
   // TODO: Refactor this to handle different inputs
   // TODO: ASK. should everyword be wrapped in a span?
   compareNeighbors(inputString) {
-    const classesToApply = [];
     const words = inputString.match(/[\w'-]+|[^w]/g);
+    const appliedColorClasses = [];
+    
+    // Initialize empty array of arrays the same length as the words array
+    for (let i = 0; i < words.length; i++) {
+      appliedColorClasses.push([]);
+    }
+
     // const words = inputString.match(/(?=\S*['-])([a-zA-Z'-]+)/g);
     // const words = inputString.match(/\b\w*['-]\w*\b/g);
 
+    const isWordAtBeginningOrEnd = (currentIndex, startIndex, endIndex) => {
+      if (currentIndex === startIndex) {
+        // then add on the LEFT class
+        return '-left ';
+      }
+      if (currentIndex === endIndex - 1) {
+        // add the MIDDLE class
+        return '-right ';
+      }
+      return '-middle ';
+    };
     // Loop through words array to apply <span>'s depending on if they are in a phrase or not
     for (let i = 0; i < words.length; i++) {
       const currWord = words[i];
       if (this.wordMap[currWord]) {
-        const currPhrases = this.wordMap[currWord].colors;
-        if (currPhrases.length === 1 && this.wordMap[currWord].oneWord) {
-          words[i] = `<span class="${currPhrases[0]}">${words[i]}</span>`;
+        const currColors = this.wordMap[currWord].colors;
+        const firstColor = currColors[0];
+        const firstPhraseLength = this.wordMap[currWord][`${firstColor}Length`];
+        
+        // If there is only 1 color listed for this word & 
+        //  the max possible length of phrase the word is in
+        //  is 1 then we want to add the base class color to
+        //  this word and move to the next word in the input string
+
+        if (currColors.length === 1 && firstPhraseLength < 2) {
+          console.log('First Color Len: ', firstPhraseLength);
+          appliedColorClasses[i].push(firstColor);
         } else {
-          console.log('Curr Color:');
-          for (let j = 0; j < currPhrases.length; j++) {
-            const currPhraseColor = this.wordMap[currWord].colors[j];
-            console.log(currPhraseColor);
+          // If more than one color we want to compare the following
+          //  words and their phrases up to the max possible phrase 
+          //  length of the current word from the wordMap and
+          //  apply those phrases to the span class for each word
+          // let classesToInsert = '';
 
-            // This begins the look ahead logic to determine if a word is
-            // in a phrase and which classes should be applied to it
-            // based on the next words in the words array.
-            // if (classesToApply[i].includes(currPhraseColor)) break;
-            // let flag = true;
-            //   for (let k = i + 1; k < LENGTH OF CURRENT PHRASE; k++){
+          for (let j = 0; j < currColors.length; j++) {
+            const currColor = this.wordMap[currWord].colors[j];
+            const phraseLength = this.wordMap[currWord][`${currColor}Length`];
+            console.log('phraseLength: ', phraseLength);
 
-            //   }
+            appliedColorClasses[i].push(currColor);
+
+            
+            // Skip if this word already has this color
+            // if (words[i].includes(currColor)) {
+            //   console.log('word has color already: ', currColor);
+            //   break;
+            // }
+
+            // Add the base class to the class string.
+            // let tempClasses = `${currColor} `;
+            // console.log('Curr Color String: ', tempClasses);
+
+            // This begins the look ahead logic to determine if a
+            //  word is in a phrase and which classes should be 
+            //  applied to it based on the next words in the words
+            //  array.
+            let hasCommonNeighborColors = true;
+            // let kIndex = i;
+            let endOfPhraseIndex = i + (phraseLength);
+            const trackedIndexes = [i];
+
+            // look ahead at each word and if it doesn't contain
+            //  the same color in wordMap then stop and throw flag
+            // ((callback) => {
+
+            for (let k = i + 1; k < endOfPhraseIndex; k++) {
+              console.log('HIT LOOK AHEAD', currWord, currColor);
+              let nextWord = words[k];
+                
+              // Skip this word and move to next if it is whitespace or punctuation
+              //  TODO: CHANGE to regex below
+              while ([' ', '!', '?', '.', "'"].includes(nextWord)) {
+                k++;
+                endOfPhraseIndex++;
+                nextWord = words[k];
+              }
+                
+              console.log('NEXT word: ', nextWord);
+              trackedIndexes.push(k);
+              if (!this.wordMap[nextWord] || !(this.wordMap[nextWord].colors.includes(currColor))) {
+                console.log('BROKE LOOK AHEAD LOOP');
+                hasCommonNeighborColors = false;
+                break;
+              }
+            }
+            // callback();
+            // })(pushCommonClasses);
+
+            // const pushCommonClasses = () => {
+            if (hasCommonNeighborColors) {
+              console.log('Has Common Nei: ', hasCommonNeighborColors, currWord);
+              // If flag is still true then add the class to a temp
+              //  string that we will use to apply to the current 
+              //  word's classes.
+              // console.log(kindex, i, endOfPhraseIndex);
+              // const wordLocation = isWordAtBeginningOrEnd(kIndex, i, endOfPhraseIndex);
+              // tempClasses += ` ${currColor}${wordLocation} `;
+              // console.log('tempClasses: ', tempClasses);
+              console.log('TRACKED Indexes: ', trackedIndexes);
+              trackedIndexes.forEach(index => {
+                const tempClass = `${currColor}${isWordAtBeginningOrEnd(index, i, phraseLength)}`;
+                appliedColorClasses[index].push(tempClass);
+                console.log('Adding Class: ', tempClass);
+              });
+
+              // for (let k = i; k < phraseLength; k++) {
+              //   const wordLocation = isWordAtBeginningOrEnd(k, i, phraseLength);
+              //   tempClasses += `${currColor}${wordLocation}`;
+              //   appliedColorClasses[k].push(tempClasses);
+              //   console.log('Clasess adding: ', tempClasses);
+              // }
+            }
+            // };
 
 
-            // if (i === 0) {
-            //   // then add on the LEFT class and color
-            // }
-            // if (!(i === 0) || !(i === currPhrases.length - 1)) {
-            //   // add the MIDDLE class and Color
-            // }
-            // if (i === currPhrases.length - 1) {
-            //   // add RIGHT class and Color
-            // }
-            // }
+
+            
+            // classesToInsert += tempClasses;
           }
+          // words[i] = `<span class="${classesToInsert}">${words[i]}</span>`;
         }
-      } else if (!(words[i] === ' ')) {
-        words[i] = `<span>${words[i]}</span>`;
+        // TODO: FINISH THIS PART
+        // } else if (!(words[i] === ' ')) {
+        // appliedColorClasses[i] = `<span>${words[i]}</span>`;
       }
     }
+    console.log('appliedColorClasses: ', appliedColorClasses);
+
+    // Take the words and appliedClasses and combine them
+    console.log(words.length, appliedColorClasses.length);
+    for (let i = 0; i < words.length; i++) {
+      const currWord = words[i];
+      if (appliedColorClasses[i]) {
+        const wordClasses = appliedColorClasses[i].join(' ');
+        words[i] = `<span class="${wordClasses}">${currWord}</span>`;
+      } else {
+        words[i] = `<span>${currWord}</span>`;
+      }
+    }
+
     // take these words and join them back together
     const resultHTML = words.join('');
     return resultHTML;
