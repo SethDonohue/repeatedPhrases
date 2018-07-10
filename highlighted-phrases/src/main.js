@@ -98,10 +98,17 @@ const testWordLists = {
   ],
 };
 
-const testString = 'I\'m very unlikely to leave an adorable puppy. We do not want alarming or aggressive candidates, our candidates should be action-oriented otherwise they\'ll be asked to leave. Here we are creative, love new technology, and our arm is very unlikely to go-to radio! We do not cross our team with a log file and we deliver new technology with love and we are adorable.';
+const testString = 'I\'m very unlikely to leave an adorable puppy. We do not want alarming or aggressive candidates, our candidates should be action-oriented otherwise they\'ll be asked to leave. Here we are creative, love new technology, and our arm is very unlikely to go-to radio! We do not cross with our team with a log file and we deliver new technology with love and we are adorable.';
+
+const shortTest = 'adorable puppy';
+const shortTestTwo = 'very unlikely to leave';
+const shortTestThree = 'our arm';
 
 const controllerOne = new Controller('hightlighter-target', testWordLists);
 
 controllerOne.highlightRender(testString);
+// controllerOne.highlightRender(shortTest);
+// controllerOne.highlightRender(shortTestTwo);
+// controllerOne.highlightRender(shortTestThree);
 
 // console.log(document.getElementById('child-nodes-test').childNodes);

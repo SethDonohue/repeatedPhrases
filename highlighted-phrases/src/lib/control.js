@@ -105,37 +105,29 @@ export default class Controller {
       const currWord = words[i];
       if (this.wordMap[currWord]) {
         const currColors = this.wordMap[currWord].colors;
-        const firstColor = currColors[0];
-        const firstPhraseLength = this.wordMap[currWord][`${firstColor}Length`];
-        
         // If there is only 1 color listed for this word & 
         //  the max possible length of phrase the word is in
         //  is 1 then we want to add the base class color to
-        //  this word and move to the next word in the input string
+        //   appliedColorClasses[i].push(firstColor);
+        // } else {
+        // If more than one color we want to compare the following
+        //  words and their phrases up to the max possible phrase 
+        //  length of the current word from the wordMap and
+        //  apply those phrases to the span class for each word
+        for (let j = 0; j < currColors.length; j++) {
+          const currColor = this.wordMap[currWord].colors[j];
+          const phraseLength = this.wordMap[currWord][`${currColor}Length`];
+          console.log('CurrColor and Phrase Length: ', currColor, phraseLength);
 
-        if (currColors.length === 1 && firstPhraseLength < 2) {
-          console.log('First Color Len: ', firstPhraseLength);
-          appliedColorClasses[i].push(firstColor);
-        } else {
-          // If more than one color we want to compare the following
-          //  words and their phrases up to the max possible phrase 
-          //  length of the current word from the wordMap and
-          //  apply those phrases to the span class for each word
-          // let classesToInsert = '';
-
-          for (let j = 0; j < currColors.length; j++) {
-            const currColor = this.wordMap[currWord].colors[j];
-            const phraseLength = this.wordMap[currWord][`${currColor}Length`];
-            console.log('phraseLength: ', phraseLength);
-
+          if (phraseLength === 1) {
             appliedColorClasses[i].push(currColor);
-
-            
+          } else {
             // Skip if this word already has this color
-            // if (words[i].includes(currColor)) {
-            //   console.log('word has color already: ', currColor);
-            //   break;
-            // }
+            if (appliedColorClasses[i].includes(currColor)) {
+              console.log('word has color already: ', currColor);
+              break;
+            }
+            // appliedColorClasses[i].push(currColor);
 
             // Add the base class to the class string.
             // let tempClasses = `${currColor} `;
@@ -160,7 +152,7 @@ export default class Controller {
                 
               // Skip this word and move to next if it is whitespace or punctuation
               //  TODO: CHANGE to regex below
-              while ([' ', '!', '?', '.', "'"].includes(nextWord)) {
+              while ([' ', '!', '?', '.'].includes(nextWord)) {
                 k++;
                 endOfPhraseIndex++;
                 nextWord = words[k];
@@ -174,45 +166,21 @@ export default class Controller {
                 break;
               }
             }
-            // callback();
-            // })(pushCommonClasses);
-
-            // const pushCommonClasses = () => {
             if (hasCommonNeighborColors) {
               console.log('Has Common Nei: ', hasCommonNeighborColors, currWord);
               // If flag is still true then add the class to a temp
               //  string that we will use to apply to the current 
               //  word's classes.
-              // console.log(kindex, i, endOfPhraseIndex);
-              // const wordLocation = isWordAtBeginningOrEnd(kIndex, i, endOfPhraseIndex);
-              // tempClasses += ` ${currColor}${wordLocation} `;
-              // console.log('tempClasses: ', tempClasses);
               console.log('TRACKED Indexes: ', trackedIndexes);
               trackedIndexes.forEach(index => {
-                const tempClass = `${currColor}${isWordAtBeginningOrEnd(index, i, phraseLength)}`;
+                const tempClass = `${currColor}${isWordAtBeginningOrEnd(index, i, endOfPhraseIndex)}`;
                 appliedColorClasses[index].push(tempClass);
+                appliedColorClasses[index].push(currColor);
                 console.log('Adding Class: ', tempClass);
               });
-
-              // for (let k = i; k < phraseLength; k++) {
-              //   const wordLocation = isWordAtBeginningOrEnd(k, i, phraseLength);
-              //   tempClasses += `${currColor}${wordLocation}`;
-              //   appliedColorClasses[k].push(tempClasses);
-              //   console.log('Clasess adding: ', tempClasses);
-              // }
             }
-            // };
-
-
-
-            
-            // classesToInsert += tempClasses;
           }
-          // words[i] = `<span class="${classesToInsert}">${words[i]}</span>`;
         }
-        // TODO: FINISH THIS PART
-        // } else if (!(words[i] === ' ')) {
-        // appliedColorClasses[i] = `<span>${words[i]}</span>`;
       }
     }
     console.log('appliedColorClasses: ', appliedColorClasses);
@@ -221,7 +189,7 @@ export default class Controller {
     console.log(words.length, appliedColorClasses.length);
     for (let i = 0; i < words.length; i++) {
       const currWord = words[i];
-      if (appliedColorClasses[i]) {
+      if (appliedColorClasses[i].length > 0) {
         const wordClasses = appliedColorClasses[i].join(' ');
         words[i] = `<span class="${wordClasses}">${currWord}</span>`;
       } else {
