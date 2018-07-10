@@ -51,29 +51,120 @@ export default class Controller {
         }
       });
     });
-    console.log('Word Map: ', this.wordMap);
   }
 
-  // createPhraseWordsArray(inputString) {
-  //   const stringPhraseWordsArray = {};
-  //   const words = inputString.match(/\w+|[^w]/g);
+  addMouseOverListener(spanCollection) { // eslint-disable-line
 
-  //   // Loop through words array to apply <span>'s depending on if they are in a phrase or not
-  //   for (let i = 0; i < words.length; i++) {
+    const colorPriority = (classList) => {
+      if (classList.contains('red-list')) {
+        return 'red-list';
+      }
+      if (classList.contains('green-list')) {
+        return 'green-list';
+      }
+      if (classList.contains('blue-list')) {
+        return 'blue-list';
+      }
+      if (classList.contains('purple-list')) {
+        return 'purple-list';
+      }
+      if (classList.contains('grey-list')) {
+        return 'grey-list';
+      }
+    };
 
-  //   }
-    
-  //   words.forEach(word => {
-  //     if (this.wordMap[word.toLowerCase()]) {
-  //       if (stringPhraseWordsArray.length > 0) {
-  //         stringPhraseWordsArray[word].push(this.wordMap[word.toLowerCase()]);
-  //       } else {
-  //         stringPhraseWordsArray[word] = [].push(this.wordMap[word.toLowerCase()]);
-  //       }
-  //     }
-  //   });
-  //   console.log('Current String Array: ', stringPhraseWordsArray);
-  // }
+    const recursiveCheckRight = (currNode, colorClass) => {
+      const tempNodeCollection = [currNode];
+      console.log('RIGHT move', colorClass);
+      if (currNode.nextSibling.textContent === ' ') {
+        console.log('SPACE found');
+        currNode = currNode.nextSibling;
+        recursiveCheckRight(currNode, colorClass);
+      } 
+
+      if (currNode.nextSibling.classList.contains(`${colorClass}-middle`)) {
+        // ADD NODE to tempCollection and CONTINUE recursion as we have not found end of phrase
+        console.log('MIDDLE FOUND', colorClass);
+        tempNodeCollection.push(currNode.nextSibling);
+        currNode = currNode.nextSibling;
+        recursiveCheckRight(currNode, colorClass);
+      }
+      
+      if (currNode.nextSibling.classList.contains(`${colorClass}-right`)) {
+        // STOP recursion and ADD NODE as we have found the end of the phrase
+        console.log('RIGHT FOUND', colorClass);
+        tempNodeCollection.push(currNode.nextSibling);
+        return tempNodeCollection;
+      }
+    };
+
+    const recursiveCheckLeft = (currNode, colorClass) => {
+      const tempNodeCollection = [currNode];
+      console.log('Left move', colorClass);
+      if (currNode.nextSibling.textContent === ' ') {
+        console.log('SPACE found');
+        currNode = currNode.nextSibling;
+        recursiveCheckLeft(currNode, colorClass);
+      } 
+
+      if (currNode.nextSibling.classList.contains(`${colorClass}-middle`)) {
+        // ADD NODE to tempCollection and CONTINUE recursion as we have not found end of phrase
+        console.log('MIDDLE FOUND', colorClass);
+        tempNodeCollection.push(currNode.nextSibling);
+        currNode = currNode.nextSibling;
+        recursiveCheckLeft(currNode, colorClass);
+      }
+      
+      if (currNode.nextSibling.classList.contains(`${colorClass}-Left`)) {
+        // STOP recursion and ADD NODE as we have found the end of the phrase
+        console.log('Left FOUND', colorClass);
+        tempNodeCollection.push(currNode.nextSibling);
+        return tempNodeCollection;
+      }
+    };
+
+    for (let i = 0; i < spanCollection.length; i++) {
+      const currSpan = spanCollection[i];
+      const { classList } = currSpan;
+      // console.log(classList);
+
+      currSpan.addEventListener('mouseover', () => {
+        console.log('HOVERING...');
+        console.log(classList);
+        const topColorClass = colorPriority(classList);
+        let nodeCollection = [];
+
+        if (classList.contains(`${topColorClass}-left`)) {
+          console.log('HAS LEFT CLASS....');
+          // LOOK RIGHT until finding right class
+          nodeCollection = recursiveCheckRight(currSpan, topColorClass);
+          console.log(nodeCollection);
+        }
+        if (classList.contains(`${topColorClass}-middle`)) {
+          console.log('HAS MIDDLE CLASS....');
+        }
+        if (classList.contains(`${topColorClass}-right`)) {
+          console.log('HAS RIGHT CLASS....');
+          recursiveCheckLeft(currSpan, 'left');
+
+        }
+
+        //      If left class/attr, look right until right class/attr found in same color
+        //        - Use CSS attribute selector?
+        //      IF middle class/attr, look left, then right, add all elements/spans to collection
+        //      If Right class/attr, look left until left class/attr found in same color
+        //        Add all elements to collection
+        //        for all found elements 
+        //          change css to remove all other colors, darken this color and change text to white
+
+
+      });
+
+      currSpan.addEventListener('mouseout', function () {
+        console.log('OUT...');
+      });
+    }
+  }
 
   // TODO: Refactor this to handle different inputs
   // TODO: ASK. should everyword be wrapped in a span?
@@ -91,145 +182,116 @@ export default class Controller {
 
     const isWordAtBeginningOrEnd = (currentIndex, startIndex, endIndex) => {
       if (currentIndex === startIndex) {
-        // then add on the LEFT class
+        // If word is the first in phrase return -left class segment
         return '-left ';
       }
       if (currentIndex === endIndex - 1) {
-        // add the MIDDLE class
+        // If word is last in phrase return - right segment
         return '-right ';
       }
+      // otherwise return middle segment
       return '-middle ';
     };
-    // Loop through words array to apply <span>'s depending on if they are in a phrase or not
+
+    // For each word build up which classes should be applied
     for (let i = 0; i < words.length; i++) {
       const currWord = words[i];
+      
+      // Only apply classes if the word is in the wordMap
       if (this.wordMap[currWord]) {
         const currColors = this.wordMap[currWord].colors;
-        // If there is only 1 color listed for this word & 
-        //  the max possible length of phrase the word is in
-        //  is 1 then we want to add the base class color to
-        //   appliedColorClasses[i].push(firstColor);
-        // } else {
-        // If more than one color we want to compare the following
+
+        // For each color possible for the word we want to compare the following
         //  words and their phrases up to the max possible phrase 
         //  length of the current word from the wordMap and
         //  apply those phrases to the span class for each word
         for (let j = 0; j < currColors.length; j++) {
           const currColor = this.wordMap[currWord].colors[j];
           const phraseLength = this.wordMap[currWord][`${currColor}Length`];
-          console.log('CurrColor and Phrase Length: ', currColor, phraseLength);
 
           if (phraseLength === 1) {
             appliedColorClasses[i].push(currColor);
           } else {
             // Skip if this word already has this color
             if (appliedColorClasses[i].includes(currColor)) {
-              console.log('word has color already: ', currColor);
               break;
             }
-            // appliedColorClasses[i].push(currColor);
-
-            // Add the base class to the class string.
-            // let tempClasses = `${currColor} `;
-            // console.log('Curr Color String: ', tempClasses);
 
             // This begins the look ahead logic to determine if a
             //  word is in a phrase and which classes should be 
             //  applied to it based on the next words in the words
             //  array.
+
             let hasCommonNeighborColors = true;
-            // let kIndex = i;
             let endOfPhraseIndex = i + (phraseLength);
             const trackedIndexes = [i];
 
             // look ahead at each word and if it doesn't contain
             //  the same color in wordMap then stop and throw flag
-            // ((callback) => {
 
             for (let k = i + 1; k < endOfPhraseIndex; k++) {
-              console.log('HIT LOOK AHEAD', currWord, currColor);
               let nextWord = words[k];
                 
               // Skip this word and move to next if it is whitespace or punctuation
               //  TODO: CHANGE to regex below
-              while ([' ', '!', '?', '.'].includes(nextWord)) {
+              while (nextWord === ' ') {
                 k++;
                 endOfPhraseIndex++;
                 nextWord = words[k];
               }
                 
-              console.log('NEXT word: ', nextWord);
               trackedIndexes.push(k);
               if (!this.wordMap[nextWord] || !(this.wordMap[nextWord].colors.includes(currColor))) {
-                console.log('BROKE LOOK AHEAD LOOP');
                 hasCommonNeighborColors = false;
                 break;
               }
             }
             if (hasCommonNeighborColors) {
-              console.log('Has Common Nei: ', hasCommonNeighborColors, currWord);
-              // If flag is still true then add the class to a temp
-              //  string that we will use to apply to the current 
-              //  word's classes.
-              console.log('TRACKED Indexes: ', trackedIndexes);
+              // If flag is still true then add the class to appliedClases
+              //  array that we will use to apply to all the words.
               trackedIndexes.forEach(index => {
                 const tempClass = `${currColor}${isWordAtBeginningOrEnd(index, i, endOfPhraseIndex)}`;
                 appliedColorClasses[index].push(tempClass);
                 appliedColorClasses[index].push(currColor);
-                console.log('Adding Class: ', tempClass);
               });
             }
           }
         }
       }
     }
-    console.log('appliedColorClasses: ', appliedColorClasses);
 
     // Take the words and appliedClasses and combine them
-    console.log(words.length, appliedColorClasses.length);
     for (let i = 0; i < words.length; i++) {
       const currWord = words[i];
       if (appliedColorClasses[i].length > 0) {
         const wordClasses = appliedColorClasses[i].join(' ');
+        const mouseOverAttr = `mouse`
         words[i] = `<span class="${wordClasses}">${currWord}</span>`;
       } else {
-        words[i] = `<span>${currWord}</span>`;
+        // words[i] = `<span>${currWord}</span>`;
+        // TODO: MAY NEED TO have spans our every word and punctuation to highlght them easier
+        words[i] = currWord;
       }
     }
 
-    // take these words and join them back together
+    // Take all the words and join back together to keep original input format
+    //  TODO: WOULD LIKE TO refactor this for .childNodes or .siblings methods
     const resultHTML = words.join('');
     return resultHTML;
   }
 
-  //   for (let i = 0; i < phraseWordsArray.length; i++) {
-  //     for (let j = 0; j < phraseWordsArray[i].length; j++) {
-  //       const currPhrase = phraseWordsArray[i][j];
-  //       if (appliedPhrases[i].includes(currPhrase)) break;
-  //       let flag = true;
-  //       for (let k = i + 1; k < phraseMap[currPhrase].length; k++) {
-  //         if (!(phraseWordsArray[k].includes(currPhrase))) {
-  //           flag = false;
-  //           break;
-  //         }
-  //       }
-  //       if (flag) {
-  //         for (let k = i; k < phraseMap[currPhrase].length; k++) {
-  //           appliedPhrases[k].push(currPhrase);
-  //         }
-  //       }
-  //     }
-  //   }
-  //   return appliedPhrases;
-  // };
-
-  highlightRender(inputString) {
+  renderHighlights(inputString) {
     this.createWordMap(this.wordLists);
     const newHTML = this.compareNeighbors(inputString);
     // Erase Previous render to this.divTarget
     const targetElement = document.getElementById(this.divTarget); // assuming the div is an #id
     // targetElement.innerHTML = ''; // is this the most efficient or fastest way to clear a div?
     targetElement.innerHTML = newHTML;
+
+    // ADD event listeners to all spans
+    const allSpans = document.getElementsByTagName('span');
+    this.addMouseOverListener(allSpans);
+
     // Render NEW text with highlights
 
     // Compare string to word list
@@ -238,5 +300,25 @@ export default class Controller {
     // IF it is in the word lists
     // IF it is in a phrase AND next to all the other words in that phrase
     // Add classes to each span depending on which phrase it is in.
+  }
+
+  hoverOver(target) {
+    // Take target element on mouseover
+    //  Grab classes from target 
+    // TODO: 1 & 2 can probably be combined
+    //    1.)
+    //    Take ALL color classes and determine which is priority for this word 
+    //      If ONE color only choose that color
+    //      If left class/attr, look right until right class/attr found in same color
+    //        - Use CSS attribute selector?
+    //      IF middle class/attr, look left, then right, add all elements/spans to collection
+    //      If Right class/attr, look left until left class/attr found in same color
+    //        Add all elements to collection
+    //        for all found elements 
+    //          change css to remove all other colors, darken this color and change text to white
+    //    2.)
+    //    If multiple COLOR classes
+    //      Select priority color
+    //        then do same logic as above
   }
 }

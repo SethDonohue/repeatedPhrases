@@ -15,6 +15,9 @@
   --red-z-index: -1;
 }
 
+main div {
+  margin: 5vw;
+}
 span{
   padding: 0 2px;
   margin: 0 -2px;
