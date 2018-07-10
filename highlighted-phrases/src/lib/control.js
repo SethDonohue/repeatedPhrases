@@ -73,60 +73,42 @@ export default class Controller {
       }
     };
 
-    const recursiveCheckRight = (currNode, colorClass) => {
-      const tempNodeCollection = [currNode];
-      console.log('RIGHT move', colorClass);
-      if (currNode.nextSibling.textContent === ' ') {
-        console.log('SPACE found');
-        currNode = currNode.nextSibling;
-        recursiveCheckRight(currNode, colorClass);
-      } 
-
-      if (currNode.nextSibling.classList.contains(`${colorClass}-middle`)) {
-        // ADD NODE to tempCollection and CONTINUE recursion as we have not found end of phrase
-        console.log('MIDDLE FOUND', colorClass);
-        tempNodeCollection.push(currNode.nextSibling);
-        currNode = currNode.nextSibling;
-        recursiveCheckRight(currNode, colorClass);
-      }
+    const recursiveCheckRight = (node, color) => {
+      const nodeCollection = [node];
       
-      if (currNode.nextSibling.classList.contains(`${colorClass}-right`)) {
-        // STOP recursion and ADD NODE as we have found the end of the phrase
-        console.log('RIGHT FOUND', colorClass);
-        tempNodeCollection.push(currNode.nextSibling);
-        return tempNodeCollection;
-      }
+      const _recusriveCheckHelper = (currNode, colorClass, tempNodeCollection) => {
+        console.log('RIGHT move', colorClass);
+        if (currNode.nextSibling.textContent === ' ') {
+          console.log('SPACE found');
+          currNode = currNode.nextSibling;
+          _recusriveCheckHelper(currNode, colorClass, tempNodeCollection);
+        } else if (currNode.nextSibling.classList.contains(`${colorClass}-middle`)) {
+          // ADD NODE to tempCollection and CONTINUE recursion as we have not found end of phrase
+          console.log('MIDDLE FOUND', colorClass, tempNodeCollection);
+          tempNodeCollection.push(currNode.nextSibling);
+          currNode = currNode.nextSibling;
+          _recusriveCheckHelper(currNode, colorClass);
+
+        } else if (currNode.nextSibling.classList.contains(`${colorClass}-right`)) {
+          // STOP recursion and ADD NODE as we have found the end of the phrase
+          console.log('RIGHT FOUND', colorClass);
+          tempNodeCollection.push(currNode.nextSibling);
+          
+          // if (currNode.nextSibling.classList.length){
+          //   currNode.classList.forEach(class => {
+          //     recursiveCheckRight(currNode.nextSibling)
+          //   });
+          // }
+        }
+      };
+      _recusriveCheckHelper(node, color, nodeCollection);
+      return nodeCollection;
     };
 
-    const recursiveCheckLeft = (currNode, colorClass) => {
-      const tempNodeCollection = [currNode];
-      console.log('Left move', colorClass);
-      if (currNode.nextSibling.textContent === ' ') {
-        console.log('SPACE found');
-        currNode = currNode.nextSibling;
-        recursiveCheckLeft(currNode, colorClass);
-      } 
-
-      if (currNode.nextSibling.classList.contains(`${colorClass}-middle`)) {
-        // ADD NODE to tempCollection and CONTINUE recursion as we have not found end of phrase
-        console.log('MIDDLE FOUND', colorClass);
-        tempNodeCollection.push(currNode.nextSibling);
-        currNode = currNode.nextSibling;
-        recursiveCheckLeft(currNode, colorClass);
-      }
-      
-      if (currNode.nextSibling.classList.contains(`${colorClass}-Left`)) {
-        // STOP recursion and ADD NODE as we have found the end of the phrase
-        console.log('Left FOUND', colorClass);
-        tempNodeCollection.push(currNode.nextSibling);
-        return tempNodeCollection;
-      }
-    };
 
     for (let i = 0; i < spanCollection.length; i++) {
       const currSpan = spanCollection[i];
       const { classList } = currSpan;
-      // console.log(classList);
 
       currSpan.addEventListener('mouseover', () => {
         console.log('HOVERING...');
@@ -139,15 +121,19 @@ export default class Controller {
           // LOOK RIGHT until finding right class
           nodeCollection = recursiveCheckRight(currSpan, topColorClass);
           console.log(nodeCollection);
-        }
-        if (classList.contains(`${topColorClass}-middle`)) {
-          console.log('HAS MIDDLE CLASS....');
-        }
-        if (classList.contains(`${topColorClass}-right`)) {
-          console.log('HAS RIGHT CLASS....');
-          recursiveCheckLeft(currSpan, 'left');
 
+          // take the node collection
         }
+
+        // if (classList.contains(`${topColorClass}-middle`)) {
+        //   console.log('HAS MIDDLE CLASS....');
+        // }
+        
+        // if (classList.contains(`${topColorClass}-right`)) {
+        //   console.log('HAS RIGHT CLASS....');
+        //   recursiveCheckLeft(currSpan, 'left');
+
+        // }
 
         //      If left class/attr, look right until right class/attr found in same color
         //        - Use CSS attribute selector?
