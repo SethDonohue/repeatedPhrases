@@ -46,8 +46,8 @@ const shortTest = 'adorable puppy adorable. puppy';
 const shortTestTwo = 'very unlikely to leave very unlikely to! leave very unlikely to. leave very unlikely to? leave';
 const shortTestThree = 'our arm';
 
-// const controllerOne = new Controller('highlighter-target', testWordLists);
-// controllerOne.renderHighlights(testString);
+const controllerOne = new Controller('highlighter-target', testWordLists);
+controllerOne.renderHighlights(testString);
 
 // const controllerTwo = new Controller('highlighter-target-two', testWordLists);
 // controllerTwo.renderHighlights(testStringTwo);

@@ -53,7 +53,7 @@ export default class Controller {
     });
   }
 
-  addMouseOverListener(spanCollection) { // eslint-disable-line
+  addMouseListener(spanCollection) { // eslint-disable-line
 
     const colorPriority = (classList) => {
       if (classList.contains('red-list')) {
@@ -93,47 +93,102 @@ export default class Controller {
           // STOP recursion and ADD NODE as we have found the end of the phrase
           console.log('RIGHT FOUND', colorClass);
           tempNodeCollection.push(currNode.nextSibling);
+          console.log('RIGHT ClassList: ', currNode.nextSibling.classList);
           
-          // if (currNode.nextSibling.classList.length){
-          //   currNode.classList.forEach(class => {
-          //     recursiveCheckRight(currNode.nextSibling)
+          // if (currNode.nextSibling.classList.length > 2) {
+          //   console.log('Adding other colors...');
+          //   currNode.nextSibling.classList.forEach(classItem => {
+          //     console.log('recusrive color: ', classItem);
+          //     _recusriveCheckHelper(currNode.nextSibling, classItem, tempNodeCollection);
           //   });
           // }
         }
       };
+
       _recusriveCheckHelper(node, color, nodeCollection);
       return nodeCollection;
     };
 
+    const recursiveCheckLeft = (node, color) => {
+      const nodeCollection = [node];
+      
+      const _recusriveCheckHelper = (currNode, colorClass, tempNodeCollection) => {
+        console.log('LEFT move', colorClass);
+        if (currNode.previousSibling.textContent === ' ') {
+          console.log('SPACE found');
+          currNode = currNode.previousSibling;
+          _recusriveCheckHelper(currNode, colorClass, tempNodeCollection);
+        } else if (currNode.previousSibling.classList.contains(`${colorClass}-middle`)) {
+          // ADD NODE to tempCollection and CONTINUE recursion as we have not found end of phrase
+          console.log('MIDDLE FOUND', colorClass, tempNodeCollection);
+          tempNodeCollection.push(currNode.previousSibling);
+          currNode = currNode.previousSibling;
+          _recusriveCheckHelper(currNode, colorClass);
+
+        } else if (currNode.previousSibling.classList.contains(`${colorClass}-left`)) {
+          // STOP recursion and ADD NODE as we have found the end of the phrase
+          console.log('LEFT FOUND', colorClass);
+          tempNodeCollection.push(currNode.previousSibling);
+          console.log('LEFT ClassList: ', currNode.previousSibling.classList);
+          
+          // if (currNode.nextSibling.classList.length > 2) {
+          //   console.log('Adding other colors...');
+          //   currNode.nextSibling.classList.forEach(classItem => {
+          //     console.log('recusrive color: ', classItem);
+          //     _recusriveCheckHelper(currNode.nextSibling, classItem, tempNodeCollection);
+          //   });
+          // }
+        }
+      };
+
+      _recusriveCheckHelper(node, color, nodeCollection);
+      return nodeCollection;
+    };
 
     for (let i = 0; i < spanCollection.length; i++) {
-      const currSpan = spanCollection[i];
-      const { classList } = currSpan;
+      // Store the Original State of each span to use for mouseout listener
+      const spanState = {
+        mainNodeCollection: [],
+        nodeClassCollection: [],
+      };
 
-      currSpan.addEventListener('mouseover', () => {
-        console.log('HOVERING...');
+      const nodeClassCollection = [];
+      const { classList } = spanCollection[i];
+      const topColorClass = colorPriority(classList);
+
+      spanCollection[i].addEventListener('mouseover', () => {
+        console.log('Mouse OVER...');
         console.log(classList);
-        const topColorClass = colorPriority(classList);
-        let nodeCollection = [];
 
         if (classList.contains(`${topColorClass}-left`)) {
           console.log('HAS LEFT CLASS....');
           // LOOK RIGHT until finding right class
-          nodeCollection = recursiveCheckRight(currSpan, topColorClass);
-          console.log(nodeCollection);
+          spanState.mainNodeCollection = recursiveCheckRight(spanCollection[i], topColorClass);
+          console.log(spanState.mainNodeCollection);
 
-          // take the node collection
+          // take the node collection and remove all classes, then add the hovering class
+          spanState.mainNodeCollection.forEach(span => {
+            spanState.nodeClassCollection.push(span.className);
+            span.className = `${topColorClass}-hover`;
+          });
         }
 
         // if (classList.contains(`${topColorClass}-middle`)) {
         //   console.log('HAS MIDDLE CLASS....');
         // }
         
-        // if (classList.contains(`${topColorClass}-right`)) {
-        //   console.log('HAS RIGHT CLASS....');
-        //   recursiveCheckLeft(currSpan, 'left');
+        if (classList.contains(`${topColorClass}-right`)) {
+          console.log('HAS RIGHT CLASS....');
+          // LOOK RIGHT until finding right class
+          spanState.mainNodeCollection = recursiveCheckLeft(spanCollection[i], topColorClass);
+          console.log(spanState.mainNodeCollection);
 
-        // }
+          // take the node collection and remove all classes, then add the hovering class
+          spanState.mainNodeCollection.forEach(span => {
+            spanState.nodeClassCollection.push(span.className);
+            span.className = `${topColorClass}-hover`;
+          });
+        }
 
         //      If left class/attr, look right until right class/attr found in same color
         //        - Use CSS attribute selector?
@@ -142,12 +197,15 @@ export default class Controller {
         //        Add all elements to collection
         //        for all found elements 
         //          change css to remove all other colors, darken this color and change text to white
-
-
       });
 
-      currSpan.addEventListener('mouseout', function () {
-        console.log('OUT...');
+      spanCollection[i].addEventListener('mouseout', () => {
+        console.log('Mouse OUT...');
+
+        spanState.mainNodeCollection.forEach((span, index) => {
+          const currClass = spanState.nodeClassCollection[index];
+          span.className = `${currClass}`;
+        });
       });
     }
   }
@@ -268,6 +326,7 @@ export default class Controller {
 
   renderHighlights(inputString) {
     this.createWordMap(this.wordLists);
+    
     const newHTML = this.compareNeighbors(inputString);
     // Erase Previous render to this.divTarget
     const targetElement = document.getElementById(this.divTarget); // assuming the div is an #id
@@ -276,7 +335,7 @@ export default class Controller {
 
     // ADD event listeners to all spans
     const allSpans = document.getElementsByTagName('span');
-    this.addMouseOverListener(allSpans);
+    this.addMouseListener(allSpans);
 
     // Render NEW text with highlights
 
