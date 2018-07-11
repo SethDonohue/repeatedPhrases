@@ -4,11 +4,15 @@
 :root{
   --highlighted-border-radius: 3px;
   --primary-red-highlight: #fea6a4;
+  --primary-red-hover: #a76f6f;
   --primary-green-highlight: #aded71;
+  --primary-green-hover: #6d904d;
   --primary-blue-highlight: #90d8f0;
   --primary-blue-hover: #517683;
   --primary-purple-highlight: plum;
+  --primary-purple-hover: rgb(150, 108, 150);
   --primary-grey-highlight: #e8e8e8;
+  --primary-grey-hover: #7e7e7e;
   --grey-z-index: -5;
   --purple-z-index: -4;
   --blue-z-index: -3;
@@ -30,6 +34,11 @@ span{
 
 .grey-list{
   background-color: var(--primary-grey-highlight);
+}
+
+.grey-list-hover{
+  color: white;
+  background-color: var(--primary-grey-hover);
 }
 
 .grey-list-left:before{
@@ -70,6 +79,11 @@ span{
 
 .purple-list{
   background-color: var(--primary-purple-highlight);
+}
+
+.purple-list-hover{
+  color: white;
+  background-color: var(--primary-purple-hover);
 }
 
 .purple-list-left:before{
@@ -116,11 +130,6 @@ span{
   color: white;
   background-color: var(--primary-blue-hover);
 }
-
-/* .blue-list:hover{
-  color: white;
-  background-color: var(--primary-blue-hover);
-} */
 
 .blue-list-left:before{
   content: '';
@@ -175,6 +184,11 @@ span{
   background-color: var(--primary-green-highlight);
 }
 
+.green-list-hover{
+  color: white;
+  background-color: var(--primary-green-hover);
+}
+
 .green-list-left:before{
   content: '';
   position: absolute;
@@ -213,6 +227,11 @@ span{
 
 .red-list{
   background-color: var(--primary-red-highlight);
+}
+
+.red-list-hover{
+  color: white;
+  background-color: var(--primary-red-hover);
 }
 
 .red-list-left:before{

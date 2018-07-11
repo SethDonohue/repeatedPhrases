@@ -20,7 +20,8 @@ export default class Controller {
       }
     };
 
-    // Add a flag to help determine if word is NOT in a phrase
+    // Add Phrase Length per Color if not word to know how far to look
+    //  ahead when applying highlights
     const addLengthToWordMap = (colorList, word, length = 1) => {
       const newProperty = `${colorList}Length`;
       const currLength = this.wordMap[word.toLowerCase()][newProperty];
@@ -33,6 +34,12 @@ export default class Controller {
       }
     };
 
+    // Add Word Index per Color to not apply incorrect class for highlights
+    const addIndexToWordMap = (colorList, word, index) => {
+      const newProperty = `${colorList}Index`;
+      this.wordMap[word.toLowerCase()][newProperty] = index;
+    };
+
     Object.keys(wordLists).forEach(colorList => {
       wordLists[colorList].forEach(string => {
         // TODO: may need to handle punctuation here?
@@ -43,11 +50,12 @@ export default class Controller {
           addColorToWordMap(string, colorList);
           addLengthToWordMap(colorList, string);
         } else {
-          // String is multiple words so add each part to the wordMap
-          words.forEach(word => {
-            addColorToWordMap(word, colorList);
-            addLengthToWordMap(colorList, word, words.length);
-          });
+          // need to determine index of word in phrase, excluding spaces
+          for (let i = 0; i < words.length; i++) {
+            addColorToWordMap(words[i], colorList);
+            addLengthToWordMap(colorList, words[i], words.length);
+            addIndexToWordMap(colorList, words[i], i);
+          }
         }
       });
     });
@@ -205,6 +213,7 @@ export default class Controller {
         }
       });
 
+      // ADD Listener to remove hover effects
       spanCollection[i].addEventListener('mouseout', () => {
         console.log('Mouse OUT...');
 
@@ -212,6 +221,10 @@ export default class Controller {
           const currClass = spanState.nodeClassCollection[index];
           span.className = `${currClass}`;
         });
+
+        // NEED to clear out state so that it is not duplicated on multiple mouseovers
+        spanState.mainNodeCollection = [];
+        spanState.nodeClassCollection = [];
       });
     }
   }
@@ -258,6 +271,14 @@ export default class Controller {
         for (let j = 0; j < currColors.length; j++) {
           const currColor = this.wordMap[currWord].colors[j];
           const phraseLength = this.wordMap[currWord][`${currColor}Length`];
+          const wordIndex = this.wordMap[currWord][`${currColor}Index`];
+          
+          // IF this word is NOT at the beginning of the prhase or
+          //  a single word then skip this loop as it will have proper
+          //  classes applied by other first word work
+          if (wordIndex > 0) {
+            break;
+          }
 
           if (phraseLength === 1) {
             appliedColorClasses[i].push(currColor);
