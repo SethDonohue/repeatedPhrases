@@ -87,8 +87,7 @@ export default class Controller {
           console.log('MIDDLE FOUND', colorClass, tempNodeCollection);
           tempNodeCollection.push(currNode.nextSibling);
           currNode = currNode.nextSibling;
-          _recusriveCheckHelper(currNode, colorClass);
-
+          _recusriveCheckHelper(currNode, colorClass, tempNodeCollection);
         } else if (currNode.nextSibling.classList.contains(`${colorClass}-right`)) {
           // STOP recursion and ADD NODE as we have found the end of the phrase
           console.log('RIGHT FOUND', colorClass);
@@ -123,7 +122,7 @@ export default class Controller {
           console.log('MIDDLE FOUND', colorClass, tempNodeCollection);
           tempNodeCollection.push(currNode.previousSibling);
           currNode = currNode.previousSibling;
-          _recusriveCheckHelper(currNode, colorClass);
+          _recusriveCheckHelper(currNode, colorClass, tempNodeCollection);
 
         } else if (currNode.previousSibling.classList.contains(`${colorClass}-left`)) {
           // STOP recursion and ADD NODE as we have found the end of the phrase
@@ -162,33 +161,39 @@ export default class Controller {
 
         if (classList.contains(`${topColorClass}-left`)) {
           console.log('HAS LEFT CLASS....');
-          // LOOK RIGHT until finding right class
+          // LOOK RIGHT until finding right class and add the collection found to state
           spanState.mainNodeCollection = recursiveCheckRight(spanCollection[i], topColorClass);
           console.log(spanState.mainNodeCollection);
 
-          // take the node collection and remove all classes, then add the hovering class
+          // take the node collection and push it's class to state, then change the class to -hover
           spanState.mainNodeCollection.forEach(span => {
             spanState.nodeClassCollection.push(span.className);
             span.className = `${topColorClass}-hover`;
           });
-        }
-
-        // if (classList.contains(`${topColorClass}-middle`)) {
-        //   console.log('HAS MIDDLE CLASS....');
-        // }
-        
-        if (classList.contains(`${topColorClass}-right`)) {
+        } else if (classList.contains(`${topColorClass}-right`)) {
           console.log('HAS RIGHT CLASS....');
-          // LOOK RIGHT until finding right class
+          // LOOK RIGHT until finding right class and add the collection found to state
           spanState.mainNodeCollection = recursiveCheckLeft(spanCollection[i], topColorClass);
           console.log(spanState.mainNodeCollection);
 
-          // take the node collection and remove all classes, then add the hovering class
+          // take the node collection and push it's class to state, then change the class to -hover
           spanState.mainNodeCollection.forEach(span => {
             spanState.nodeClassCollection.push(span.className);
             span.className = `${topColorClass}-hover`;
           });
-        }
+        // } else if (classList.contains(`${topColorClass}-middle`)) {
+        //   console.log('HAS MIDDLE CLASS....');
+        } else if (classList.contains(`${topColorClass}`)) {
+          console.log('HAS BASE CLASS ONLY....');
+          // ONE WORD PHRASE so no main collor recurion needed, just add span to the state
+          spanState.mainNodeCollection.push(spanCollection[i]);
+          console.log(spanState.mainNodeCollection);
+
+          // take the node collection and push it's class to state, then change the class to -hover
+          spanState.mainNodeCollection.forEach(span => {
+            spanState.nodeClassCollection.push(span.className);
+            span.className = `${topColorClass}-hover`;
+          });
 
         //      If left class/attr, look right until right class/attr found in same color
         //        - Use CSS attribute selector?
@@ -197,6 +202,7 @@ export default class Controller {
         //        Add all elements to collection
         //        for all found elements 
         //          change css to remove all other colors, darken this color and change text to white
+        }
       });
 
       spanCollection[i].addEventListener('mouseout', () => {
