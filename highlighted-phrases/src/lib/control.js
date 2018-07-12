@@ -84,59 +84,70 @@ export default class Controller {
       }
     };
 
+    const _recursiveCheckHelper = (currNode, colorClass, tempNodeCollectionOne, tempNodeCollectionTwo, nextOrPrevious) => {
+      console.log(`Helper ${nextOrPrevious} move with `, colorClass);
+      let direction = '';
+      let mainSuffix = '';
+      let oppositeSuffix = '';
+      // Here we are determining which direction we need to traverse the DOM
+      //  based on what arguments are passed into this helper
+      if (nextOrPrevious === 'next') {
+        direction = 'nextSibling';
+        mainSuffix = 'right';
+        oppositeSuffix = 'left';
+      } else {
+        direction = 'previousSibling';
+        mainSuffix = 'left';
+        oppositeSuffix = 'right';
+      }
+      
+      // Stop the Recursive call if the sibling does not exist
+      if (!currNode[direction]) return;
+
+      // Skip if the node is whitepsace
+      if (currNode[direction].textContent === ' ') {
+        console.log('SPACE found');
+        currNode = currNode[direction];
+        _recursiveCheckHelper(currNode, colorClass, tempNodeCollectionOne, tempNodeCollectionTwo, nextOrPrevious);
+        
+        // ADD NODE to tempCollection and CONTINUE recursion as we have not found end of phrase
+      } else if (currNode[direction].classList.contains(`${colorClass}-middle`)) {
+        console.log('MIDDLE FOUND ', colorClass, tempNodeCollectionOne);
+        tempNodeCollectionOne.push(currNode[direction]);
+        currNode = currNode[direction];
+        _recursiveCheckHelper(currNode, colorClass, tempNodeCollectionOne, tempNodeCollectionTwo, nextOrPrevious);
+        
+        // STOP recursion and ADD NODE as we have found the end of the phrase
+      } else if (currNode[direction].classList.contains(`${colorClass}-${mainSuffix}`)) {
+        console.log(`${nextOrPrevious} FOUND `, colorClass, tempNodeCollectionOne);
+        tempNodeCollectionOne.push(currNode[direction]);
+
+        // IF the LAST word in the phrase has a middle or right class then
+        //  we know that this word is part of another phrase to the left
+        //  so we need to traverse its previous siblings and save them to the
+        //  secondary collection
+        const endClassList = currNode[direction].classList;
+        const includesMiddleOrOppositeClass = (endClassList.value.includes('middle') || endClassList.value.includes(`${oppositeSuffix}`));
+
+        if (includesMiddleOrOppositeClass) {
+          // Filter out the current color so we don't search the same color
+          const classesArray = endClassList.value
+            .split(' ')
+            .filter(classItem => !classItem.includes(colorClass) && !(classItem.length === 0));
+
+          // Get the left sibling and determine if it has a middle or right class
+          const nextPriorityColor = colorPriority(classesArray.join(''));
+          _recursiveCheckHelper(currNode[direction], nextPriorityColor, tempNodeCollectionTwo, null, nextOrPrevious);
+        }
+      }
+    };
+
     const recursiveCheckRight = (node, color) => {
       const mainNodeCollection = [node];
       const secondaryNodeCollection = [];
 
-      const _recursiveCheckHelper = (currNode, colorClass, tempNodeCollection) => {
-        console.log('RIGHT move', colorClass, 'text: ', currNode.textContent);
-        // Stop the Recursive call if the previous sibling does not exist
-        if (!currNode.nextSibling) return;
-        // Skip to next sibling if current is whitepsace
-        if (currNode.nextSibling.textContent === ' ') {
-          console.log('SPACE found');
-          currNode = currNode.nextSibling;
-          _recursiveCheckHelper(currNode, colorClass, tempNodeCollection);
-        } else if (currNode.nextSibling.classList.contains(`${colorClass}-middle`)) {
-          // ADD NODE to tempCollection and CONTINUE recursion as we have not found end of the  phrase
-          console.log('MIDDLE FOUND', colorClass, tempNodeCollection);
-          tempNodeCollection.push(currNode.nextSibling);
-          currNode = currNode.nextSibling;
-          _recursiveCheckHelper(currNode, colorClass, tempNodeCollection);
-        } else if (currNode.nextSibling.classList.contains(`${colorClass}-right`)) {
-          // STOP recursion and ADD NODE as we have found the end of the phrase
-          console.log('RIGHT FOUND...');
-          console.log('Color: ', colorClass, 'WORD: ', currNode.nextSibling.textContent);
-          tempNodeCollection.push(currNode.nextSibling);
+      _recursiveCheckHelper(node, color, mainNodeCollection, secondaryNodeCollection, 'next');
 
-          const rightClassList = currNode.nextSibling.classList;
-          console.log('RIGHT ClassList: ', rightClassList.length);
-
-          // IF the LAST word in the phrase has MORE than one color (3+ classes) then
-          //  we need to check if the other classes (not the topColor) contain a right or middle class.
-          //  If they do we know that this word is part of another phrase to the left
-          //  so we need to traverse its previous siblings and save them to the
-          //  secondary collection
-          const includesMiddleOrLeftClass = (rightClassList.value.includes('middle') || rightClassList.value.includes('left'));
-
-          if (includesMiddleOrLeftClass) {
-            // Filter out the current color and grab the next priority color to know what
-            //  phrase color to continue looking for
-            const classesArray = rightClassList.value
-              .split(' ')
-              .filter(classItem => !classItem.includes(colorClass) && !(classItem.length === 0));
-            
-            const nextPriorityColor = colorPriority(classesArray.join(''));
-
-            // Get the RIGHT sibling and determine if it has a middle or right class
-            const rightSibling = currNode.nextSibling;
-            console.log('rightsib text: ', rightSibling.textContent, nextPriorityColor);
-            _recursiveCheckHelper(rightSibling, nextPriorityColor, secondaryNodeCollection);
-            console.log('Second Collection: ', secondaryNodeCollection);
-          }
-        }
-      };
-      _recursiveCheckHelper(node, color, mainNodeCollection);
       return { mainNodeCollection, secondaryNodeCollection };
     };
 
@@ -144,66 +155,36 @@ export default class Controller {
       const mainNodeCollection = [node];
       const secondaryNodeCollection = [];
       
-      const _recursiveCheckHelper = (currNode, colorClass, tempNodeCollection) => {
-        console.log('LEFT move', colorClass, 'text: ', currNode.textContent);
-        // Stop the Recursive call if the previous sibling does not exist
-        if (!currNode.previousSibling) return;
-        if (currNode.previousSibling.textContent === ' ') {
-          console.log('SPACE found');
-          currNode = currNode.previousSibling;
-          _recursiveCheckHelper(currNode, colorClass, tempNodeCollection);
-        } else if (currNode.previousSibling.classList.contains(`${colorClass}-middle`)) {
-          // ADD NODE to tempCollection and CONTINUE recursion as we have not found end of phrase
-          console.log('MIDDLE FOUND', colorClass, tempNodeCollection);
-          tempNodeCollection.push(currNode.previousSibling);
-          currNode = currNode.previousSibling;
-          _recursiveCheckHelper(currNode, colorClass, tempNodeCollection);
+      _recursiveCheckHelper(node, color, mainNodeCollection, secondaryNodeCollection, 'previous');
 
-        } else if (currNode.previousSibling.classList.contains(`${colorClass}-left`)) {
-          // STOP recursion and ADD NODE as we have found the end of the phrase
-          console.log('LEFT FOUND...');
-          console.log('Color: ', colorClass, 'WORD: ', currNode.previousSibling.textContent);
-          tempNodeCollection.push(currNode.previousSibling);
-          
-          const leftClassList = currNode.previousSibling.classList;
-          console.log('LEFT ClassList: ', leftClassList.length);
-          
-          // IF the LAST word in the phrase has MORE than one color (3+ classes) then
-          //  we need to check if the other classes (not the topColor) contain a right or middle class.
-          //  If they do we know that this word is part of another phrase to the left
-          //  so we need to traverse its previous siblings and save them to the
-          //  secondary collection
-          const includesMiddleOrRightClass = (leftClassList.value.includes('middle') || leftClassList.value.includes('right'));
-
-          if (includesMiddleOrRightClass) {
-            const classesArray = leftClassList.value
-              .split(' ')
-              .filter(classItem => !classItem.includes(colorClass) && !(classItem.length === 0));
-
-            // Get the left sibling and determine if it has a middle or right class
-            const nextPriorityColor = colorPriority(classesArray.join(''));
-            const leftSibling = currNode.previousSibling;
-            console.log('leftsib text: ', leftSibling.textContent, nextPriorityColor);
-            _recursiveCheckHelper(leftSibling, nextPriorityColor, secondaryNodeCollection);
-            console.log('Second Collection: ', secondaryNodeCollection);
-          }
-        }
-      };
-      _recursiveCheckHelper(node, color, mainNodeCollection);
+      console.log('Main: ', mainNodeCollection, 'Secondary: ', secondaryNodeCollection);
       return { mainNodeCollection, secondaryNodeCollection };
     };
 
     const mouseOverClassApplier = (colorClass, targetSpan, classList, state) => {
       // Check which part of the phrase the class is in
       if (classList.contains(`${colorClass}-left`)) {
-        console.log('HAS LEFT CLASS....');
+        console.log('HOVERED Span has LEFT CLASS....');
         // LOOK RIGHT until finding right class and add the collection found to state
-        state.mainNodeCollection = recursiveCheckRight(targetSpan, colorClass).mainNodeCollection;
-        state.secondaryNodeCollection = recursiveCheckRight(targetSpan, colorClass).secondaryNodeCollection;
+        const tempCollection = recursiveCheckRight(targetSpan, colorClass);
+        state.mainNodeCollection = tempCollection.mainNodeCollection;
+        state.secondaryNodeCollection = tempCollection.secondaryNodeCollection;
 
-        console.log('STATE: ', state);
+        const currNodeIncludesMiddleOrRightClass = (classList.value.includes('middle') || classList.value.includes('right'));
 
-        // take the node col        // take the node collection and push it's class to state, then change the class to -hover
+        // if the other classes contain a right or middle then we need to search left
+        if (currNodeIncludesMiddleOrRightClass) {
+          console.log('Starting LEFT-CLASS ALSO has phrase to left');
+          const classesArray = classList.value
+            .split(' ')
+            .filter(classItem => !classItem.includes(colorClass) && !(classItem.length === 0));
+
+          // Get the left sibling and determine if it has a middle or right class
+          const nextPriorityColor = colorPriority(classesArray.join(''));
+          state.secondaryNodeCollection = state.secondaryNodeCollection.concat(recursiveCheckLeft(targetSpan.previousSibling, nextPriorityColor).mainNodeCollection);
+        }
+
+        // take the node collection and push it's class to state, then change the class to -hover
         state.mainNodeCollection.forEach(span => {
           state.mainClassCollection.push(span.className);
           span.className = `${colorClass}-hover`;
@@ -218,12 +199,13 @@ export default class Controller {
       } else if (classList.contains(`${colorClass}-right`)) {
         console.log('HAS RIGHT CLASS....');
         // LOOK LEFT until finding left class and add the collection found to state
-        state.mainNodeCollection = recursiveCheckLeft(targetSpan, colorClass).mainNodeCollection;
-        state.secondaryNodeCollection = recursiveCheckLeft(targetSpan, colorClass).secondaryNodeCollection;
+        const tempCollection = recursiveCheckLeft(targetSpan, colorClass);
+        state.mainNodeCollection = tempCollection.mainNodeCollection;
+        state.secondaryNodeCollection = tempCollection.secondaryNodeCollection;
 
         console.log('STATE: ', state);
 
-        // take the node col        // take the node collection and push it's class to state, then change the class to -hover
+        // take the node collection and push it's class to state, then change the class to -hover
         state.mainNodeCollection.forEach(span => {
           state.mainClassCollection.push(span.className);
           span.className = `${colorClass}-hover`;
@@ -237,11 +219,42 @@ export default class Controller {
         }
 
         // TODO: FINISH middle class logic
-        // } else if (classList.contains(`${colorClass}-middle`)) {
-        //   console.log('HAS MIDDLE CLASS....');
+      } else if (classList.contains(`${colorClass}-middle`)) {
+        console.log('HAS MIDDLE CLASS....');
+
+        // LOOK LEFT & RIGHT until finding both and adding to state
+        const mainLeftCollection = recursiveCheckLeft(targetSpan, colorClass).mainNodeCollection;
+        const mainRightCollection = recursiveCheckRight(targetSpan, colorClass).mainNodeCollection;
+        console.log(mainLeftCollection);
+        console.log(mainRightCollection);
+        const tempMainCollection = mainLeftCollection.concat(mainRightCollection);
+        state.mainNodeCollection = tempMainCollection.filter((span, position) => tempMainCollection.indexOf(span) == position);
+        console.log(state.mainNodeCollection);
+        
+        const secondaryLeftCollection = recursiveCheckLeft(targetSpan, colorClass).secondaryNodeCollection;
+        const secondaryRightCollection = recursiveCheckRight(targetSpan, colorClass).secondaryNodeCollection;
+        state.secondaryNodeCollection = secondaryLeftCollection.concat(secondaryRightCollection);
+
+        console.log('STATE: ', state);
+
+        // take the node collection and push it's class to state, then change the class to -hover
+        state.mainNodeCollection.forEach(span => {
+          state.mainClassCollection.push(span.className);
+          span.className = `${colorClass}-hover`;
+        });
+        if (state.secondaryNodeCollection.length > 0) {
+          console.log('MIDDLE Secondary Collection: ', state.secondaryNodeCollection);
+          state.secondaryNodeCollection.forEach(span => {
+            state.secondaryClassCollection.push(span.className);
+            span.className = '';
+          });
+        }
+
+
       } else if (classList.contains(`${colorClass}`)) {
         console.log('HAS BASE CLASS ONLY....');
-        // ONE WORD PHRASE so no further searching for main color, just add span to the state
+        // TODO: ONE WORD PHRASE but can still be in another phrase, so need to look left
+        //  and right and update secondary collection
         state.mainNodeCollection.push(targetSpan);
         console.log(state.mainNodeCollection);
 
@@ -276,7 +289,6 @@ export default class Controller {
 
       spanCollection[i].addEventListener('mouseover', () => {
         console.log('Mouse OVER...');
-        console.log(classList);
 
         // Check which part of the phrase the class is in
         mouseOverClassApplier(topColorClass, spanCollection[i], classList, spanState);
