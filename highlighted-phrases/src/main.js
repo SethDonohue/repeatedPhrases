@@ -42,9 +42,10 @@ const testWordLists = {
     'action-oriented',
     'alarming',
     'candidates',
-    'leave',
+    // 'leave',
     'do not want',
     'actionable',
+    // 'unlikely',
   ],
   'green-list': [
     'adorable',
@@ -52,14 +53,14 @@ const testWordLists = {
     'love',
     'new technology',
     'groundbreaking',
+    // 'puppy',
   ],
   'blue-list': [
     'an adorable puppy',
-    'actionable item an puppy',
-    'an actionable item puppy',
     'aggressive',
     'arm',
     'very unlikely',
+    'leave me alone',
   ],
   'purple-list': [
     'do not cross',
@@ -78,7 +79,7 @@ const testString = 'I\'m very unlikely to leave an adorable puppy. We do not wan
 const testStringTwo = 'We expect our candidates to be action-oriented, aggressive and have creative ideas for our team. You will deliver new technology and groundbreaking designs.';
 
 const shortTest = ' puppy an adorable. adorable an puppy. adorable puppy adorable. puppy. an adorable puppy.... adorable an puppy. puppy an adorable. an actionable item puppy actionable item an puppy';
-const shortTestTwo = 'very unlikely to leave very unlikely to! leave very unlikely to. leave very unlikely to? leave leave very unlikely to. leave very unlikely to? unlikey to leave very. leave very unlikely to';
+const shortTestTwo = 'very unlikely to leave very unlikely to! leave very unlikely to. leave very unlikely to? leave leave very unlikely to. leave very unlikely to? unlikey to leave very. leave very unlikely to. very unlikely to leave me alone';
 const shortTestThree = 'our arm';
 
 const controllerOne = new Controller('highlighter-target', testWordLists);
@@ -92,4 +93,3 @@ controllerThree.renderHighlights(shortTestTwo);
 
 const controllerFour = new Controller('highlighter-target-four', testWordLists);
 controllerFour.renderHighlights(shortTest);
-console.log(controllerFour.wordMap);
