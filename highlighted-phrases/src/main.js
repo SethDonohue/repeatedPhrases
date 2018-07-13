@@ -80,7 +80,7 @@ const testWordLists = {
   ],
 };
 
-const testString = 'I\'m very unlikely to leave an adorable puppy. We do not want alarming or aggressive candidates, our candidates should be action-oriented otherwise they will be asked to leave. Here we are creative, love new technology, and our arm is very unlikely to go-to radio! We do not cross our team with a log file and we will deliver new technology with love and we are adorable. will take stuff.';
+const testString = 'I\'m very unlikely to leave an adorable puppy. We do not want alarming or aggressive candidates, our candidates should be action-oriented otherwise they will be asked to leave. Here we are creative, love new technology, and our arm is very unlikely to go-to radio! We do not cross our team with a log file and we will deliver new technology with love as we are adorable.'
 
 const testStringTwo = 'We expect our candidates to be action-oriented, aggressive and have creative ideas for our team. You will deliver new technology and groundbreaking designs.';
 
@@ -103,3 +103,6 @@ controllerFour.renderHighlights(shortTest);
 
 const controllerFive = new Controller('highlighter-target-five', testWordLists);
 controllerFive.renderHighlights(shortTestFive);
+
+const controllerFINAL = new Controller('highlighter-target-final', originalLists);
+controllerFINAL.renderHighlights(testString);
