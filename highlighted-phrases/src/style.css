@@ -33,6 +33,14 @@ span{
 }
 
 .grey-list{
+  /* content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--grey-z-index); */
+  border-radius: var(--highlighted-border-radius);
   background-color: var(--primary-grey-highlight);
 }
 
@@ -78,6 +86,14 @@ span{
 }
 
 .purple-list{
+  /* content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--purple-z-index); */
+  border-radius: var(--highlighted-border-radius);
   background-color: var(--primary-purple-highlight);
 }
 
@@ -123,6 +139,14 @@ span{
 }
 
 .blue-list{
+  /* content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--blue-z-index); */
+  border-radius: var(--highlighted-border-radius);
   background-color: var(--primary-blue-highlight);
 }
 
@@ -181,6 +205,15 @@ span{
 }
 
 .green-list{
+  /* content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--green-z-index); */
+  border-radius: var(--highlighted-border-radius);
+  border-radius: var(--highlighted-border-radius);
   background-color: var(--primary-green-highlight);
 }
 
@@ -226,6 +259,14 @@ span{
 }
 
 .red-list{
+  /* content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--red-z-index); */
+  border-radius: var(--highlighted-border-radius);
   background-color: var(--primary-red-highlight);
 }
 

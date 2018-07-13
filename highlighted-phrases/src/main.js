@@ -64,7 +64,7 @@ const testWordLists = {
     'aggressive',
     'arm',
     'very unlikely',
-    'is not cool',
+    // 'is not cool',
     // 'leave me alone',
   ],
   'purple-list': [
