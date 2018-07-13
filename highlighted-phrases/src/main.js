@@ -37,6 +37,9 @@ const originalLists = {
   ],
 };
 
+
+// IF there is a phrase that starts with the same word in the same color
+//  section then it creates a bug where
 const testWordLists = {
   'red-list': [
     'action-oriented',
@@ -44,6 +47,7 @@ const testWordLists = {
     'candidates',
     'leave',
     'do not want',
+    'do care',
     'actionable',
     'take',
     'we are cool',
@@ -64,8 +68,8 @@ const testWordLists = {
     'aggressive',
     'arm',
     'very unlikely',
-    // 'is not cool',
-    // 'leave me alone',
+    'is not cool',
+    // 'leave me', // Since it is first in the phrase it causes 
   ],
   'purple-list': [
     'do not cross',
@@ -80,7 +84,7 @@ const testWordLists = {
   ],
 };
 
-const testString = 'I\'m very unlikely to leave an adorable puppy. We do not want alarming or aggressive candidates, our candidates should be action-oriented otherwise they will be asked to leave. Here we are creative, love new technology, and our arm is very unlikely to go-to radio! We do not cross our team with a log file and we will deliver new technology with love as we are adorable.'
+const testString = 'I\'m very unlikely to leave an adorable puppy. We do not want alarming or aggressive candidates, our candidates should be action-oriented otherwise they will be asked to leave. Here we are creative, love new technology, and our arm is very unlikely to go-to radio! We do not cross our team with a log file and we will deliver new technology with love as we are adorable.';
 
 const testStringTwo = 'We expect our candidates to be action-oriented, aggressive and have creative ideas for our team. You will deliver new technology and groundbreaking designs.';
 

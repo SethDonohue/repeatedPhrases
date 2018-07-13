@@ -188,7 +188,7 @@ export default class Controller {
         // take the node collection and push it's class to state, then change the class to -hover
         state.mainNodeCollection.forEach(span => {
           state.mainClassCollection.push(span.className);
-          span.className = `${colorClass}-hover`;
+          span.className = `${colorClass}-hover ${colorClass}-middle-hover`;
         });
         if (state.secondaryNodeCollection.length > 0) {
           console.log('Secondary Collection: ', state.secondaryNodeCollection);
@@ -222,7 +222,7 @@ export default class Controller {
         // take the node collection and push it's class to state, then change the class to -hover
         state.mainNodeCollection.forEach(span => {
           state.mainClassCollection.push(span.className);
-          span.className = `${colorClass}-hover`;
+          span.className = `${colorClass}-hover ${colorClass}-middle-hover`;
         });
         if (state.secondaryNodeCollection.length > 0) {
           console.log('Secondary Collection: ', state.secondaryNodeCollection);
@@ -247,7 +247,7 @@ export default class Controller {
         // take the node collection and push it's class to state, then change the class to -hover
         state.mainNodeCollection.forEach(span => {
           state.mainClassCollection.push(span.className);
-          span.className = `${colorClass}-hover`;
+          span.className = `${colorClass}-hover ${colorClass}-middle-hover`;
         });
         if (state.secondaryNodeCollection.length > 0) {
           console.log('MIDDLE Secondary Collection: ', state.secondaryNodeCollection);
@@ -287,7 +287,7 @@ export default class Controller {
         // take the node collection and push it's class to state, then change the class to -hover
         state.mainNodeCollection.forEach(span => {
           state.mainClassCollection.push(span.className);
-          span.className = `${colorClass}-hover`;
+          span.className = `${colorClass}-hover ${colorClass}-middle-hover`;
         });
         state.secondaryNodeCollection.forEach(span => {
           state.secondaryClassCollection.push(span.className);
