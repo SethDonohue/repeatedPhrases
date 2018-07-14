@@ -162,146 +162,174 @@ export default class Controller {
       return { mainNodeCollection, secondaryNodeCollection };
     };
 
-    const mouseOverClassApplier = (colorClass, targetSpan, classList, state) => {
-      // Check which part of the phrase the class is in
-      if (classList.contains(`${colorClass}-left`)) {
-        console.log('HOVERED Span has LEFT CLASS....');
-        // LOOK RIGHT until finding right class and add the collection found to state
-        const tempCollection = recursiveCheckRight(targetSpan, colorClass);
-        state.mainNodeCollection = tempCollection.mainNodeCollection;
-        state.secondaryNodeCollection = tempCollection.secondaryNodeCollection;
+    // mouseOverClassApplier checks for which part of the phrase the main word is in using
+    //  the highest priority color, and determines which direction, if not both,
+    //  to traverse the DOM recursively to grab the correct nodes.
+    const mouseOverClassApplier = (targetSpan, mainClassList, state) => {
+      // Find all the colors the hovered span is in...
+      
+      //  +++++++++ HELPER FUNCTIONS +++++++++
 
-        const currNodeIncludesMiddleOrRightClass = (classList.value.includes('middle') || classList.value.includes('right'));
-
-        // if the other classes contain a right or middle then we need to search left
-        if (currNodeIncludesMiddleOrRightClass) {
-          console.log('Starting LEFT-CLASS ALSO has phrase to left');
-          const classesArray = classList.value
-            .split(' ')
-            .filter(classItem => !classItem.includes(colorClass) && !(classItem.length === 0));
-
-          // Get the left sibling and determine if it has a middle or right class
-          const nextPriorityColor = colorPriority(classesArray.join(''));
-          state.secondaryNodeCollection = state.secondaryNodeCollection.concat(recursiveCheckLeft(targetSpan.previousSibling, nextPriorityColor).mainNodeCollection);
+      // THIS creates a new array with only the base classes that exist in the 
+      //  hovered span to prevent us from duplicating work on a single color
+      //  since there are typically two classes per color.
+      const getColors = (classNames) => {
+        const colors = [];
+        if (classNames.includes('red-list')) {
+          colors.push('red-list');
         }
+        if (classNames.includes('green-list')) {
+          colors.push('green-list');
+        }
+        if (classNames.includes('blue-list')) {
+          colors.push('blue-list');
+        }
+        if (classNames.includes('purple-list')) {
+          colors.push('purple-list');
+        }
+        if (classNames.includes('grey-list')) {
+          colors.push('grey-list');
+        }
+        return colors;
+      };
 
-        // take the node collection and push it's class to state, then change the class to -hover
-        state.mainNodeCollection.forEach(span => {
-          state.mainClassCollection.push(span.className);
-          span.className = `${colorClass}-hover ${colorClass}-middle-hover`;
-        });
-        if (state.secondaryNodeCollection.length > 0) {
-          console.log('Secondary Collection: ', state.secondaryNodeCollection);
-          state.secondaryNodeCollection.forEach(span => {
-            state.secondaryClassCollection.push(span.className);
-            span.className = '';
+      const hoveredSpanColors = getColors(targetSpan.className);
+      console.log(hoveredSpanColors);
+
+      state.mainClassCollection.push(targetSpan);
+      hoveredSpanColors.forEach(colorClass => {
+        // If the current word is the left most word then start checking to the right
+        //  to find the rest of the main phrase.
+        if (mainClassList.contains(`${colorClass}-left`)) {
+          console.log('HOVERED Span has LEFT CLASS....');
+          const tempCollection = recursiveCheckRight(targetSpan.nextElementSibling, colorClass);
+          state.mainNodeCollection = state.mainClassCollection.concat(tempCollection.mainNodeCollection);
+          state.secondaryNodeCollection = tempCollection.secondaryNodeCollection;
+
+          // Now check if the current word has a middle or right as this means
+          //  our main word is in another phrase.
+          //  If true we will search to the left further...
+          const currNodeIncludesMiddleOrRightClass = (mainClassList.value.includes('middle') || mainClassList.value.includes('right'));
+          if (currNodeIncludesMiddleOrRightClass) {
+            console.log('Starting LEFT-CLASS ALSO has phrase to left');
+
+            // We need to copy the mainClassList and remove the last color from it
+            //  in order to find the next highest priority color.
+            const nextPriorityColor = getNextColor(mainClassList, colorClass);
+            state.secondaryNodeCollection = state.secondaryNodeCollection.concat(recursiveCheckLeft(targetSpan.previousElementSibling, nextPriorityColor).mainNodeCollection);
+          }
+
+          // Take the main collection and push the elements class to a stored state
+          //  so we can undo the highlights on mouseout.
+          //  Then change the class to have the hover effect.
+          state.mainNodeCollection.forEach(span => {
+            state.mainClassCollection.push(span.className);
+            span.className = `${colorClass}-hover ${colorClass}-middle-hover`;
           });
-        }
-      } else if (classList.contains(`${colorClass}-right`)) {
-        console.log('HAS RIGHT CLASS....');
-        // LOOK LEFT until finding left class and add the collection found to state
-        const tempCollection = recursiveCheckLeft(targetSpan, colorClass);
-        state.mainNodeCollection = tempCollection.mainNodeCollection;
-        state.secondaryNodeCollection = tempCollection.secondaryNodeCollection;
+          // IF the secondary collection was pushed to then store their classes as well
+          //  and remove each spans highlight effect.
+          if (state.secondaryNodeCollection.length > 0) {
+            console.log('Secondary Collection: ', state.secondaryNodeCollection);
+            state.secondaryNodeCollection.forEach(span => {
+              state.secondaryClassCollection.push(span.className);
+              span.className = '';
+            });
+          }
+        // LOOK LEFT until finding left class and add the collection found to state.
+        } else if (mainClassList.contains(`${colorClass}-right`)) {
+          console.log('HAS RIGHT CLASS....');
+          const tempCollection = recursiveCheckLeft(targetSpan.previousElementSibling, colorClass);
+          state.mainNodeCollection = state.mainClassCollection.concat(tempCollection.mainNodeCollection);
+          state.secondaryNodeCollection = tempCollection.secondaryNodeCollection;
 
-        const currNodeIncludesMiddleOrLeftClass = (classList.value.includes('middle') || classList.value.includes('left'));
+          const currNodeIncludesMiddleOrLeftClass = (mainClassList.value.includes('middle') || mainClassList.value.includes('left'));
 
-        // if the other classes contain a right or middle then we need to search left
-        if (currNodeIncludesMiddleOrLeftClass) {
-          console.log('Starting RIGHT-CLASS ALSO has phrase to right');
-          const classesArray = classList.value
-            .split(' ')
-            .filter(classItem => !classItem.includes(colorClass) && !(classItem.length === 0));
-
-          // Find next priority color and add to secondary state
-          const nextPriorityColor = colorPriority(classesArray.join(''));
-          state.secondaryNodeCollection = state.secondaryNodeCollection.concat(recursiveCheckRight(targetSpan.nextSibling, nextPriorityColor).mainNodeCollection);
-        }
+          // If the other classes contain a right or middle then we need to search left
+          // if (includesMiddleOrOppositeClass(mainClassList, 'left')) {
+          console.log('----HERE-----', currNodeIncludesMiddleOrLeftClass);
+          if (currNodeIncludesMiddleOrLeftClass) {
+            console.log('Starting RIGHT-CLASS ALSO has phrase to right');
+            const nextPriorityColor = getNextColor(mainClassList, colorClass);
+            state.secondaryNodeCollection = state.secondaryNodeCollection.concat(recursiveCheckRight(targetSpan.nextElementSibling, nextPriorityColor).mainNodeCollection);
+          }
 
 
-        // take the node collection and push it's class to state, then change the class to -hover
-        state.mainNodeCollection.forEach(span => {
-          state.mainClassCollection.push(span.className);
-          span.className = `${colorClass}-hover ${colorClass}-middle-hover`;
-        });
-        if (state.secondaryNodeCollection.length > 0) {
-          console.log('Secondary Collection: ', state.secondaryNodeCollection);
-          state.secondaryNodeCollection.forEach(span => {
-            state.secondaryClassCollection.push(span.className);
-            span.className = '';
+          // Take the node collection and push it's class to state store, then change the class to -hover
+          state.mainNodeCollection.forEach(span => {
+            state.mainClassCollection.push(span.className);
+            span.className = `${colorClass}-hover ${colorClass}-middle-hover`;
           });
-        }
-      } else if (classList.contains(`${colorClass}-middle`)) {
-        console.log('HAS MIDDLE CLASS....');
-
-        // LOOK LEFT & RIGHT until finding both and adding to state
-        const mainLeftCollection = recursiveCheckLeft(targetSpan, colorClass).mainNodeCollection;
-        const mainRightCollection = recursiveCheckRight(targetSpan, colorClass).mainNodeCollection;
-        const tempMainCollection = mainLeftCollection.concat(mainRightCollection);
-        state.mainNodeCollection = tempMainCollection.filter((span, position) => tempMainCollection.indexOf(span) == position);
+          // IF the secondary collection was pushed to then store their classes as well
+          //  and remove each spans highlight effect.
+          if (state.secondaryNodeCollection.length > 0) {
+            console.log('Secondary Collection: ', state.secondaryNodeCollection);
+            state.secondaryNodeCollection.forEach(span => {
+              state.secondaryClassCollection.push(span.className);
+              span.className = '';
+            });
+          }
+          // For a word in the middle of a phrase we need to look LEFT & RIGHT
+          //  until finding left & right class and add the collection found to state.
+        } else if (mainClassList.contains(`${colorClass}-middle`)) {
+          console.log('HAS MIDDLE CLASS....');
+          // LOOK LEFT & RIGHT until finding both and adding to state
+          const mainLeftCollection = recursiveCheckLeft(targetSpan.previousElementSibling, colorClass).mainNodeCollection;
+          const mainRightCollection = recursiveCheckRight(targetSpan.nextElementSibling, colorClass).mainNodeCollection;
+          const tempMainCollection = mainLeftCollection.concat(mainRightCollection);
+          state.mainNodeCollection = tempMainCollection.filter((span, position) => tempMainCollection.indexOf(span) === position);
         
-        const secondaryLeftCollection = recursiveCheckLeft(targetSpan, colorClass).secondaryNodeCollection;
-        const secondaryRightCollection = recursiveCheckRight(targetSpan, colorClass).secondaryNodeCollection;
-        state.secondaryNodeCollection = secondaryLeftCollection.concat(secondaryRightCollection);
+          const secondaryLeftCollection = recursiveCheckLeft(targetSpan, colorClass).secondaryNodeCollection;
+          const secondaryRightCollection = recursiveCheckRight(targetSpan, colorClass).secondaryNodeCollection;
+          state.secondaryNodeCollection = secondaryLeftCollection.concat(secondaryRightCollection);
 
-        // take the node collection and push it's class to state, then change the class to -hover
-        state.mainNodeCollection.forEach(span => {
-          state.mainClassCollection.push(span.className);
-          span.className = `${colorClass}-hover ${colorClass}-middle-hover`;
-        });
-        if (state.secondaryNodeCollection.length > 0) {
-          console.log('MIDDLE Secondary Collection: ', state.secondaryNodeCollection);
+          // take the node collection and push it's class to state, then change the class to -hover
+          state.mainNodeCollection.forEach(span => {
+            state.mainClassCollection.push(span.className);
+            span.className = `${colorClass}-hover ${colorClass}-middle-hover`;
+          });
+          if (state.secondaryNodeCollection.length > 0) {
+            console.log('MIDDLE Secondary Collection: ', state.secondaryNodeCollection);
+            state.secondaryNodeCollection.forEach(span => {
+              state.secondaryClassCollection.push(span.className);
+              span.className = '';
+            });
+          }
+          // By now we know that our highest priority color phrase was hovered ONLY having
+          //  the base class (.red-list .blue-list, etc.) so we can add it to the main state
+          //  store collection andt then we need to check if it is in other phrases. If so
+          //  we'll check left and right of it to grab those nodes and put them in the
+          //  secondary state store.
+        } else {
+          console.log('HAS BASE CLASS ONLY....');
+          // IF mainClassList is longer than 2 then there are 2 or more colors, so we need to 
+          //  look left and right as we are in the base phrase and it would have only one class
+          //  if not in other phrases.
+          if (mainClassList.length > 2) {
+          // Find next priority color spans and add them to secondary state
+            const nextPriorityColor = getNextColor(mainClassList, colorClass);
+            state.secondaryNodeCollection = (recursiveCheckRight(targetSpan.nextSibling, nextPriorityColor).mainNodeCollection);
+            state.secondaryNodeCollection = state.secondaryNodeCollection.concat(recursiveCheckLeft(targetSpan.previousSibling, nextPriorityColor).mainNodeCollection);
+
+            // Remove duplicate spans since we are using the same recursive function.
+            //  TODO: Need to debug this so that we don't have duplicate spans added to 
+            //        state store.
+            state.secondaryNodeCollection = state.secondaryNodeCollection.filter((span, position) => state.secondaryNodeCollection.indexOf(span) === position);
+          } 
+          state.mainNodeCollection.push(targetSpan);
+          console.log('STATE AFTER BASE CLASS: ', state);
+
+          // take the node collection and push it's class to state, then change the class to -hover
+          state.mainNodeCollection.forEach(span => {
+            state.mainClassCollection.push(span.className);
+            span.className = `${colorClass}-hover ${colorClass}-middle-hover`;
+          });
+          console.log(state.secondaryNodeCollection);
           state.secondaryNodeCollection.forEach(span => {
             state.secondaryClassCollection.push(span.className);
             span.className = '';
           });
         }
-      } else /* if (classList.contains(`${colorClass}`)) */ {
-        console.log('HAS BASE CLASS ONLY....');
-        // TODO: ONE WORD PHRASE but can still be in another phrase, so need to look left
-        //  and right and update secondary collection
-        // IF classList is longer than 2 then there are 2 or more colors, so we need to 
-        //  look left and right
-        if (classList.length > 2) {
-          // Filter out the current color so we don't search the same color
-          const classesArray = classList.value
-            .split(' ')
-            .filter(classItem => !classItem.includes(colorClass) && !(classItem.length === 0));
-
-          // Find next priority color spans and add them to secondary state
-          const nextPriorityColor = colorPriority(classesArray.join(''));
-          state.secondaryNodeCollection = (recursiveCheckRight(targetSpan.nextSibling, nextPriorityColor).mainNodeCollection);
-          
-          // Find previous priority color spans and add them to secondary state
-          const prevousPriorityColor = colorPriority(classesArray.join(''));
-          state.secondaryNodeCollection = state.secondaryNodeCollection.concat(recursiveCheckLeft(targetSpan.previousSibling, prevousPriorityColor).mainNodeCollection);
-
-          state.secondaryNodeCollection = state.secondaryNodeCollection.filter((span, position) => state.secondaryNodeCollection.indexOf(span) == position);
-          
-          state.mainNodeCollection.push(targetSpan);
-        } else {
-          state.mainNodeCollection.push(targetSpan);
-        }
-        console.log('STATE AFTER BASE CLASS: ', state);
-
-        // take the node collection and push it's class to state, then change the class to -hover
-        state.mainNodeCollection.forEach(span => {
-          state.mainClassCollection.push(span.className);
-          span.className = `${colorClass}-hover ${colorClass}-middle-hover`;
-        });
-        state.secondaryNodeCollection.forEach(span => {
-          state.secondaryClassCollection.push(span.className);
-          span.className = '';
-        });
-
-        //      If left class/attr, look right until right class/attr found in same color
-        //        - Use CSS attribute selector?
-        //      IF middle class/attr, look left, then right, add all elements/spans to collection
-        //      If Right class/attr, look left until left class/attr found in same color
-        //        Add all elements to collection
-        //        for all found elements 
-        //          change css to remove all other colors, darken this color and change text to white
-      }
+      });
     };
 
     for (let i = 0; i < spanCollection.length; i++) {
@@ -315,13 +343,14 @@ export default class Controller {
 
       // const mainClassCollection = [];
       const { classList } = spanCollection[i];
-      const topColorClass = colorPriority(classList.value);
+
+      // const topColorClass = colorPriority(classList.value);
 
       spanCollection[i].addEventListener('mouseover', () => {
         console.log('Mouse OVER...');
-
-        // Check which part of the phrase the class is in
-        mouseOverClassApplier(topColorClass, spanCollection[i], classList, spanState);
+        // Check which part of the phrase the class is in and apply the 
+        //  appropriate classes to it.
+        mouseOverClassApplier(spanCollection[i], classList, spanState);
       });
 
       // ADD Listener to remove hover effects
