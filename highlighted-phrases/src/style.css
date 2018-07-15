@@ -38,25 +38,12 @@ span {
   background-color: var(--primary-grey-highlight);
 }
 
-.grey-list:before {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: var(--grey-z-index);
-  border-radius: var(--highlighted-border-radius);
-  box-shadow: -3px 0 0px 0px var(--primary-grey-highlight), 3px 0 0px 0px var(--primary-grey-highlight);
-}
-
-
 .grey-list-hover{
   color: white;
   background-color: var(--primary-grey-hover);
 }
 
-.grey-list-left:before{
+.grey-list:before, .grey-list-left:before, .grey-list-right:before, .grey-list-middle:before, .grey-list-middle-hover:before {
   content: '';
   position: absolute;
   top: 0;
@@ -65,41 +52,24 @@ span {
   right: 0;
   z-index: var(--grey-z-index);
   border-radius: var(--highlighted-border-radius);
+}
+
+.grey-list:before {
+  box-shadow: -3px 0 0px 0px var(--primary-grey-highlight), 3px 0 0px 0px var(--primary-grey-highlight);
+}
+
+.grey-list-left:before{
   box-shadow: -3px 0 0px 0px var(--primary-grey-highlight), 6px 0 0px 0px var(--primary-grey-highlight);
 }
 
 .grey-list-right:before{
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: var(--purple-z-index);
-  border-radius: var(--highlighted-border-radius);
   box-shadow: 3px 0 0px 0px var(--primary-grey-highlight), -6px 0 0px 0px var(--primary-grey-highlight);
 }
 
 .grey-list-middle:before{
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: var(--grey-z-index);
-  border-radius: var(--highlighted-border-radius);
   box-shadow: -10px 0 0px 0px var(--primary-grey-highlight), 10px 0 0px 0px var(--primary-grey-highlight);
 }
 .grey-list-middle-hover:before{
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: var(--grey-z-index);
-  border-radius: var(--highlighted-border-radius);
   box-shadow: -5px 0 0px 0px var(--primary-grey-hover), 5px 0 0px 0px var(--primary-grey-hover);
 }
 
@@ -107,68 +77,39 @@ span {
   background-color: var(--primary-purple-highlight);
 }
 
-.purple-list:before {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: var(--purple-z-index);
-  border-radius: var(--highlighted-border-radius);
-  box-shadow: -3px 0 0px 0px var(--primary-purple-highlight), 3px 0 0px 0px var(--primary-purple-highlight);
-}
-
 .purple-list-hover{
   color: white;
   background-color: var(--primary-purple-hover);
 }
 
-.purple-list-left:before{
+.purple-list:before, .purple-list-left:before, .purple-list-right:before, .purple-list-middle:before, .purple-list-middle-hover:before {
   content: '';
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: var(--purple-z-index);
+  z-index: var(--grey-z-index);
   border-radius: var(--highlighted-border-radius);
+}
+
+.purple-list:before {
+  box-shadow: -3px 0 0px 0px var(--primary-purple-highlight), 3px 0 0px 0px var(--primary-purple-highlight);
+}
+
+.purple-list-left:before{
   box-shadow: -3px 0 0px 0px var(--primary-purple-highlight), 6px 0 0px 0px var(--primary-purple-highlight);
 }
 
 .purple-list-right:before{
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: var(--purple-z-index);
-  border-radius: var(--highlighted-border-radius);
   box-shadow: 3px 0 0px 0px var(--primary-purple-highlight), -6px 0 0px 0px var(--primary-purple-highlight);
 }
 
 .purple-list-middle:before{
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index:var(--purple-z-index);
-  border-radius: var(--highlighted-border-radius);
   box-shadow: -10px 0 0px 0px var(--primary-purple-highlight), 10px 0 0px 0px var(--primary-purple-highlight);
 }
 
 .purple-list-middle-hover:before{
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index:var(--purple-z-index);
-  border-radius: var(--highlighted-border-radius);
   box-shadow: -5px 0 0px 0px var(--primary-purple-hover), 5px 0 0px 0px var(--primary-purple-hover);
 }
 
@@ -176,81 +117,43 @@ span {
   background-color: var(--primary-blue-highlight);
 }
 
-.blue-list:before {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: var(--blue-z-index);
-  border-radius: var(--highlighted-border-radius);
-  box-shadow: -3px 0 0px 0px var(--primary-blue-highlight), 3px 0 0px 0px var(--primary-blue-highlight);
-}
-
-
 .blue-list-hover{
   color: white;
   background-color: var(--primary-blue-hover);
 }
 
-.blue-list-left:before{
+.blue-list:before, .blue-list-left:before, .blue-list-right:before, .blue-list-middle:before, .blue-list-middle-hover:before {
   content: '';
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: var(--blue-z-index);
+  z-index: var(--grey-z-index);
   border-radius: var(--highlighted-border-radius);
+}
+
+.blue-list:before {
+  box-shadow: -3px 0 0px 0px var(--primary-blue-highlight), 3px 0 0px 0px var(--primary-blue-highlight);
+}
+
+.blue-list-left:before{
   box-shadow: -3px 0 0px 0px var(--primary-blue-highlight), 6px 0 0px 0px var(--primary-blue-highlight);
 }
 
 .blue-list-right:before{
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: var(--blue-z-index);
-  border-radius: var(--highlighted-border-radius);
   box-shadow: -6px 0 0px 0px var(--primary-blue-highlight), 3px 0 0px 0px var(--primary-blue-highlight);
 }
 
 .blue-list-left-hover:before{
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: var(--blue-z-index);
-  border-radius: var(--highlighted-border-radius);
   box-shadow: 10px 0 0px 0px var(--primary-blue-hover);
 }
 
 .blue-list-middle:before{
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: var(--blue-z-index);
-  border-radius: var(--highlighted-border-radius);
   box-shadow: -10px 0 0px 0px var(--primary-blue-highlight), 10px 0 0px 0px var(--primary-blue-highlight);
 }
 
 .blue-list-middle-hover:before{
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: var(--blue-z-index);
-  border-radius: var(--highlighted-border-radius);
   box-shadow: -5px 0 0px 0px var(--primary-blue-hover), 5px 0 0px 0px var(--primary-blue-hover);
 }
 
@@ -258,69 +161,39 @@ span {
   background-color: var(--primary-green-highlight);
 }
 
-.green-list:before {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: var(--green-z-index);
-  border-radius: var(--highlighted-border-radius);
-  box-shadow: -3px 0 0px 0px var(--primary-green-highlight), 3px 0 0px 0px var(--primary-green-highlight);
-}
-
 .green-list-hover{
   color: white;
   background-color: var(--primary-green-hover);
-  /* box-shadow: -10px 0 0px 0px var(--primary-green-hover), 10px 0 0px 0px var(--primary-green-hover); */
 }
 
-.green-list-left:before{
+.green-list:before, .green-list-left:before, .green-list-right:before, .green-list-middle:before, .green-list-middle-hover:before {
   content: '';
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: var(--green-z-index);
+  z-index: var(--grey-z-index);
   border-radius: var(--highlighted-border-radius);
+}
+
+.green-list:before {
+  box-shadow: -3px 0 0px 0px var(--primary-green-highlight), 3px 0 0px 0px var(--primary-green-highlight);
+}
+
+.green-list-left:before{
   box-shadow: -3px 0 0px 0px var(--primary-green-highlight), 6px 0 0px 0px var(--primary-green-highlight);
 }
 
 .green-list-right:before{
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: var(--blue-z-index);
-  border-radius: var(--highlighted-border-radius);
   box-shadow: -6px 0 0px 0px var(--primary-green-highlight), 3px 0 0px 0px var(--primary-green-highlight);
 }
 
 .green-list-middle:before{
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: var(--green-z-index);
-  border-radius: var(--highlighted-border-radius);
   box-shadow: -10px 0 0px 0px var(--primary-green-highlight), 10px 0 0px 0px var(--primary-green-highlight);
 }
 
 .green-list-middle-hover:before{
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: var(--green-z-index);
-  border-radius: var(--highlighted-border-radius);
   box-shadow: -5px 0 0px 0px var(--primary-green-hover), 5px 0 0px 0px var(--primary-green-hover);
 }
 
@@ -328,67 +201,38 @@ span {
   background-color: var(--primary-red-highlight);
 }
 
-.red-list:before {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: var(--red-z-index);
-  border-radius: var(--highlighted-border-radius);
-  box-shadow: -3px 0 0px 0px var(--primary-red-highlight), 3px 0 0px 0px var(--primary-red-highlight);
-}
-
 .red-list-hover{
   color: white;
   background-color: var(--primary-red-hover);
 }
 
-.red-list-left:before{
+.red-list:before, .red-list-left:before, .red-list-right:before, .red-list-middle:before, .red-list-middle-hover:before {
   content: '';
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: var(--red-z-index);
+  z-index: var(--grey-z-index);
   border-radius: var(--highlighted-border-radius);
+}
+
+.red-list:before {
+  box-shadow: -3px 0 0px 0px var(--primary-red-highlight), 3px 0 0px 0px var(--primary-red-highlight);
+}
+
+.red-list-left:before{
   box-shadow: -3px 0 0px 0px var(--primary-red-highlight), 6px 0 0px 0px var(--primary-red-highlight);
 }
 
 .red-list-right:before{
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: var(--red-z-index);
-  border-radius: var(--highlighted-border-radius);
   box-shadow: -6px 0 0px 0px var(--primary-red-highlight), 3px 0 0px 0px var(--primary-red-highlight);
 }
 
 .red-list-middle:before{
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: var(--red-z-index);
-  border-radius: var(--highlighted-border-radius);
   box-shadow: -10px 0 0px 0px var(--primary-red-highlight), 10px 0 0px 0px var(--primary-red-highlight);
 }
 
 .red-list-middle-hover:before{
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: var(--red-z-index);
-  border-radius: var(--highlighted-border-radius);
   box-shadow: -5px 0 0px 0px var(--primary-red-hover), 5px 0 0px 0px var(--primary-red-hover);
 }
