@@ -396,7 +396,7 @@ export default class Controller {
       if (currentIndex === startIndex) {
         return '-left ';
       }
-      // If word is last in phrase return - right segment
+      // If word is last in phrase return -right segment
       if (currentIndex === endIndex - 1) {
         return '-right ';
       }

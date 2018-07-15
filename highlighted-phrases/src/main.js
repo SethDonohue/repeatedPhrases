@@ -125,7 +125,7 @@ const testWordListsThree = {
   ],
 };
 
-const testString = 'we\'re very unlikely to leave an adorable puppy. We do not want alarming or aggressive candidates, our candidates should be action-oriented otherwise they will be asked to leave. At this company we are creative, love new technology, and our arm is very unlikely to go-to radio! We do not cross our team with a log file and we will deliver new technology with love as we are adorable...';
+const testString = 'we\'re very unlikely to leave an adorable puppy. We do not want alarming or aggressive candidates, our candidates should be action-oriented otherwise they will be asked to leave. At this company we are creative, love new technology, and our arm is very unlikely to go-to radio! We do not cross with our team do not cross our team with a log file and we will deliver new technology with love as we are adorable...';
 
 const testStringTwo = 'We expect our candidates to be action-oriented, aggressive and have creative ideas for our team. You will deliver new technology and groundbreaking designs.';
 
