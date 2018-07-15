@@ -18,20 +18,22 @@
   --blue-z-index: -3;
   --green-z-index: -2;
   --red-z-index: -1;
-  --hover-box-shadow-thickness-left: -3px;
-  --hover-box-shadow-thickness-right: 3px;
+  --hover-box-shadow-thickness-left: -5px;
+  --hover-box-shadow-thickness-right: 5px;
 }
 
 main div {
   margin: 5vw;
 }
-span{
-  padding: 0 2px;
-  margin: 0 -2px;
+span {
+  /* padding: 0 2px; */
+  /* margin: 0 -2px; */
   background: transparent;
   border-radius: var(--highlighted-border-radius);
   box-sizing: border-box;
   position: relative;
+  background-clip: padding-box;
+  -webkit-background-clip: padding-box;
 }
 
 .grey-list{
@@ -62,6 +64,7 @@ span{
   z-index: var(--grey-z-index);
   border-radius: var(--highlighted-border-radius);
   box-shadow: 10px 0 0px 0px var(--primary-grey-highlight);
+
 }
 
 .grey-list-middle:before{
@@ -74,6 +77,7 @@ span{
   z-index: var(--grey-z-index);
   border-radius: var(--highlighted-border-radius);
   box-shadow: -10px 0 0px 0px var(--primary-grey-highlight), 10px 0 0px 0px var(--primary-grey-highlight);
+  
 }
 .grey-list-middle-hover:before{
   content: '';

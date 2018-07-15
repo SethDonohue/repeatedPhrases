@@ -40,58 +40,81 @@ const originalLists = {
 
 // IF there is a phrase that starts with the same word in the same color
 //  section then it creates a bug where
+// TODO: TEST Can these be sorted to help with the index issue? If the
+//        longest phrases are last then the color index should be increased
+//        and when we come across a shorter word than the index color then
+//        the recursive call should stop once we reach the last word in th phrase.
 const testWordLists = {
   'red-list': [
     'action-oriented',
     'alarming',
     'candidates',
+    // 'very',
     'leave',
     'do not want',
     'do care',
     'actionable',
     'take',
-    'we are cool',
-    // 'unlikely',
+    // 'we are cool',
+    'unlikely',
+    'is it good',
+    'fifty',
   ],
   'green-list': [
     'adorable',
+    'is it good for',
     'will take stuff',
     'creative',
     'love',
     'groundbreaking',
+    // If the phrase begins with the same word as another lower priority
+    //  phrase ends with it will work, but the opposite does not work.
     'new technology',
-    'cool to hang',
+    // 'will deliver new',
+    // 'new technology dude bro yah man sweet as all heck awesome sick coolio yeah',
+    'three ten',
+    'are not cool',
+    // 'cool we are',
     // 'puppy',
+    'fifty five',
   ],
   'blue-list': [
+    'ten twenty',
     'an adorable puppy',
+    'very unlikely',
     'aggressive',
     'arm',
-    'very unlikely',
-    'is not cool',
     // 'leave me', // Since it is first in the phrase it causes 
+    'fifty five hundred',
   ],
   'purple-list': [
     'do not cross',
     'log file',
     'our team',
     'radio',
-    'cool we are',
+    // 'are not cool',
+    // 'cool we are',
+    'eleventeen fifty five hundred thousand',
   ],
   'grey-list': [
-    'will deliver new',
     'very unlikely to leave',
+    'cool to hang',
+    'will deliver new',
+    // 'new technology',
+    // 'we are the best company and this company is the company that can and will deliver new technology dude bro',
+    'one two three',
+    'million eleventeen fifty five hundred thousand and three',
   ],
 };
 
-const testString = 'I\'m very unlikely to leave an adorable puppy. We do not want alarming or aggressive candidates, our candidates should be action-oriented otherwise they will be asked to leave. Here we are creative, love new technology, and our arm is very unlikely to go-to radio! We do not cross our team with a log file and we will deliver new technology with love as we are adorable.';
+const testString = 'I\'m very unlikely to leave an adorable puppy. We do not want alarming or aggressive candidates, our candidates should be action-oriented otherwise they will be asked to leave. Here we are creative, love new technology, and our arm is very unlikely to go-to radio! We do not cross our team with a log file and we will deliver new technology with love as we are adorable... very unlikely... very unlikely to... very unlikely to leave .';
 
-const testStringTwo = 'We expect our candidates to be action-oriented, aggressive and have creative ideas for our team. You will deliver new technology and groundbreaking designs.';
+const testStringTwo = 'We expect our candidates to be action-oriented, aggressive and have creative ideas for our team. You will deliver new technology and groundbreaking designs. new technology new technology ';
 
 const shortTest = ' puppy an adorable. adorable an puppy. adorable puppy adorable. puppy. an adorable puppy.... adorable an puppy. puppy an adorable. an actionable item puppy actionable item an puppy';
 const shortTestTwo = 'very unlikely to leave very unlikely to! leave very unlikely to. leave very unlikely to? leave leave very unlikely to. leave very unlikely to? unlikey to leave very. leave very unlikely to. very unlikely to leave me alone';
 const shortTestThree = 'our arm';
-const shortTestFive = 'will deliver new technology. is not cool we are!!!! we are cool to hang';
+const shortTestFive = 'we are the best company and this company is the company that can and will deliver new technology dude bro yah man sweet as all heck awesome sick coolio yeah. is not cool we are!!!! we are cool to hang. are not cool we are. cool we are not cool. three one two three! one two three ten! three ten twenty.... what is it good for... ?! million eleventeen fifty five hundred thousand and three?';
 
 const controllerOne = new Controller('highlighter-target', testWordLists);
 controllerOne.renderHighlights(testString);
