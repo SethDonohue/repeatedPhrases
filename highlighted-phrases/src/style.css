@@ -145,10 +145,6 @@ span {
   box-shadow: -6px 0 0px 0px var(--primary-blue-highlight), 3px 0 0px 0px var(--primary-blue-highlight);
 }
 
-.blue-list-left-hover:before{
-  box-shadow: 10px 0 0px 0px var(--primary-blue-hover);
-}
-
 .blue-list-middle:before{
   box-shadow: -10px 0 0px 0px var(--primary-blue-highlight), 10px 0 0px 0px var(--primary-blue-highlight);
 }
