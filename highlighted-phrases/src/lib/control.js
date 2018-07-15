@@ -100,7 +100,7 @@ export default class Controller {
     //  - If the word also contains other color classes this method creates a secondary
     //    collection of nodes to remove the classes from, which removes their highlights.
     // 
-    const _recursiveCheckHelper = (currNode, colorClass, tempNodeCollectionOne, tempNodeCollectionTwo, nextOrPrevious) => {
+    const _recursiveCheckHelper = (currNode, colorClass, tempNodeCollectionOne, tempNodeCollectionTwo, nextOrPrevious, flag) => {
       let direction = '';
       let mainSuffix = '';
       let oppositeSuffix = '';
@@ -128,7 +128,7 @@ export default class Controller {
       // Skip the next node if the next node is whitepsace.
       if (nextNode.textContent === ' ') {
         console.log('SPACE found');
-        _recursiveCheckHelper(nextNode, colorClass, tempNodeCollectionOne, tempNodeCollectionTwo, nextOrPrevious);
+        _recursiveCheckHelper(nextNode, colorClass, tempNodeCollectionOne, tempNodeCollectionTwo, nextOrPrevious, flag);
       
       // Skip the next node if it contains a word that is not in the word map or is
       //  at the end of the sentence.
@@ -143,7 +143,7 @@ export default class Controller {
       } else if (nextNode.classList.contains(`${colorClass}-middle`)) {
         console.log('MIDDLE FOUND ', 'COLOR:', colorClass, 'ADDED:', nextNode.textContent);
         tempNodeCollectionOne.push(nextNode);
-        _recursiveCheckHelper(nextNode, colorClass, tempNodeCollectionOne, tempNodeCollectionTwo, nextOrPrevious);
+        _recursiveCheckHelper(nextNode, colorClass, tempNodeCollectionOne, tempNodeCollectionTwo, nextOrPrevious, flag);
         
       // STOP recursion and ADD NODE as we have found the end of the phrase.
       } else if (nextNode.classList.contains(`${colorClass}-${mainSuffix}`)) {
@@ -157,12 +157,17 @@ export default class Controller {
         const endClassList = nextNode.classList;
         const nextPriorityColor = getNextColor(endClassList, colorClass);
 
-        if (includesMiddleOrOppositeClass(endClassList, oppositeSuffix)) {
+        if (includesMiddleOrOppositeClass(endClassList, oppositeSuffix) && flag) {
+          flag = false;
           // Filter out the current color so we don't search the same color,
           //  and find the next priority color.
           console.log('++++++HIT MIDDLE OR OPPOSITE CLASS AT END OF PHRASE+++');
           console.log(nextPriorityColor);
-          _recursiveCheckHelper(nextNode, nextPriorityColor, tempNodeCollectionTwo, null, nextOrPrevious);
+
+          // Throw our flag so this call doesn't happen more than twice as we only need this
+          //  logic to occur for either end of the main phrase, not all phrases.
+          //  The other highlights in the main word will be handled by the secondary
+          _recursiveCheckHelper(nextNode, nextPriorityColor, tempNodeCollectionTwo, null, nextOrPrevious, flag);
         }
       }
     };
@@ -207,14 +212,9 @@ export default class Controller {
       console.log('FIRST Added ', targetSpan.textContent);
       state.mainNodeCollection.push(targetSpan);
 
-      if (classList.length < 2) {
-        // Has only one class so it is a base case, only one color and a single word.
-        console.log('TargetSpan is Base Case with ONE class');
-      } else {
-        // Is in multiple colors or a phrase (more than one word);
-        console.log('TargetSpan has MORE than one class');
-
-        const hoveredSpanColors = getSecondaryColors(classList.value, mainColor);
+      // Is in multiple colors or a phrase (more than one word);
+      if (classList.length >= 2) {
+        const remainingSpanColors = getSecondaryColors(classList.value, mainColor);
 
         let tempCollection = [];
 
@@ -269,9 +269,9 @@ export default class Controller {
           .concat(tempCollection.secondaryNodeCollection);
 
         // Filter out main color from colors and do ALL secondary collection work for each color
-        console.log(hoveredSpanColors);
+        console.log(remainingSpanColors);
 
-        hoveredSpanColors.forEach(colorClass => {
+        remainingSpanColors.forEach(colorClass => {
           console.log('Starting Secondary Color Check: ', colorClass);
           if (classList.contains(`${colorClass}-left`)) {
             console.log('HOVERED Span has LEFT SECONDARY CLASS in Color: ', colorClass);
@@ -296,6 +296,10 @@ export default class Controller {
               .concat(recursiveCheck(targetSpan.previousSibling, colorClass, 'previous').mainNodeCollection);
           }
         });
+
+      // Has only one color and one class so it is a single word not in any other phrases.
+      } else {
+        console.log('TargetSpan is Base Case with ONE class');
       }
       // Filter the collections for in case a span was added more than once
       state.mainNodeCollection = state.mainNodeCollection
@@ -309,6 +313,9 @@ export default class Controller {
       state.secondaryNodeCollection = state.secondaryNodeCollection
         .filter(node => !state.mainNodeCollection.includes(node));
       
+
+      console.log('MAIN:', state.mainNodeCollection);
+      console.log('SECONDARY:', state.secondaryNodeCollection);
       // Take the main collection and push the elements class to a stored state
       //  so we can undo the highlights on mouseout.
       //  Then change the class to have the hover effect.
@@ -342,7 +349,7 @@ export default class Controller {
       const topColorClass = highestPriorityColor(classList.value);
 
       spanCollection[i].addEventListener('mouseover', () => {
-        console.log('Mouse OVER...', topColorClass, spanCollection[i], classList);
+        console.log('Mouse OVER...');
         // Check which part of the phrase the class is in and apply the 
         //  appropriate classes to it.
         mouseOverClassApplier(spanCollection[i], classList, spanState);
