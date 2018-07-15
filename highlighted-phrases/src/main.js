@@ -474,12 +474,18 @@ class Controller {
     return resultHTML;
   }
 
+  // MAIN mthod to call with input string which renders highlights and attaches
+  //  listeners for the hovering affect.
   renderHighlights(inputString) {
     // CREATE the word map so we can know how to highlight each word when
     //  dealing with the inputString.
     this.createWordMap(this.wordLists);
 
+    // Take the inputString and compare each worth with follow on words to render
+    //  the correct highlight for each word and phrase.
     const newHTML = this.compareNeighbors(inputString);
+
+    // Target the DIV and set it's innerHTML.
     const targetElement = document.getElementById(this.divTarget); // Assumption: The div is given as an #id
     targetElement.innerHTML = newHTML; // Research: Is this the most efficient or fastest way to clear a div?
 
@@ -523,13 +529,6 @@ const originalLists = {
   ],
 };
 
-
-// IF there is a phrase that starts with the same word in the same color
-//  section then it creates a bug where
-// TODO: TEST Can these be sorted to help with the index issue? If the
-//        longest phrases are last then the color index should be increased
-//        and when we come across a shorter word than the index color then
-//        the recursive call should stop once we reach the last word in th phrase.
 const testWordLists = {
   'red-list': [
     'action-oriented',
