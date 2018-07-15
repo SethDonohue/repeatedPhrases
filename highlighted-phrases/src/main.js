@@ -130,20 +130,20 @@ class Controller {
       if (nextNode.textContent === ' ') {
         _recursiveCheckHelper(nextNode, colorClass, tempNodeCollectionOne, tempNodeCollectionTwo, nextOrPrevious, flag);
 
-        // Skip the next node if it contains a word that is not in the word map or is
-        //  at the end of the sentence.
-        //  If the textConent has whitepsace it is a node between two spans and can be skipped.
-        //  NOTE: textContent of a text node includes the whitepsace around it.
+      // Skip the next node if it contains a word that is not in the word map or is
+      //  at the end of the sentence.
+      //  If the textConent has whitepsace it is a node between two spans and can be skipped.
+      //  NOTE: textContent of a text node includes the whitespace around it.
       } else if (nextNode.textContent.includes(' ') ||
         ['!', '?', '.'].includes(nextNode.textContent)) {
 
-        // If the node is in the middle of a phrase add it to tempCollection
-        //  and CONTINUE recursion as we have not found end of the phrase.
+      // If the node is in the middle of a phrase add it to tempCollection
+      //  and CONTINUE recursion as we have not found end of the phrase.
       } else if (nextNode.classList.contains(`${colorClass}-middle`)) {
         tempNodeCollectionOne.push(nextNode);
         _recursiveCheckHelper(nextNode, colorClass, tempNodeCollectionOne, tempNodeCollectionTwo, nextOrPrevious, flag);
 
-        // STOP recursion and ADD NODE as we have found the end of the phrase.
+      // STOP recursion and ADD NODE as we have found the end of the phrase.
       } else if (nextNode.classList.contains(`${colorClass}-${mainSuffix}`)) {
         tempNodeCollectionOne.push(nextNode);
 
@@ -156,12 +156,10 @@ class Controller {
 
         if (includesMiddleOrOppositeClass(endClassList, oppositeSuffix) && flag) {
           flag = false;
-          // Filter out the current color so we don't search the same color,
-          //  and find the next priority color.
 
           // Throw our flag so this call doesn't happen more than twice as we only need this
           //  logic to occur for either end of the main phrase, not all phrases.
-          //  The other highlights in the main word will be handled by the secondary
+          //  The other colors in the main word will be handled by the secondary loop.
           _recursiveCheckHelper(nextNode, nextPriorityColor, tempNodeCollectionTwo, null, nextOrPrevious, flag);
         }
       }
