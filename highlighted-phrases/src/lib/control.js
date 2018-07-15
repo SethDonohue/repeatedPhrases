@@ -175,11 +175,12 @@ export default class Controller {
     const recursiveCheck = (node, color, nextOrPrevious) => {
       const mainNodeCollection = [];
       const secondaryNodeCollection = [];
+      const flag = true;
 
       if (!node) {
         return;
       }
-      _recursiveCheckHelper(node, color, mainNodeCollection, secondaryNodeCollection, nextOrPrevious);
+      _recursiveCheckHelper(node, color, mainNodeCollection, secondaryNodeCollection, nextOrPrevious, flag);
       return { mainNodeCollection, secondaryNodeCollection }; //eslint-disable-line
     };
 
