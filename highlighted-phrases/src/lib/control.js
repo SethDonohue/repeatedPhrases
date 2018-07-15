@@ -61,9 +61,9 @@ export default class Controller {
   //  logic for the hover effect on each span.
   addMouseListener(spanCollection) { // eslint-disable-line
 
-    // colorPriority takes in a string in order to work with arrays and DOMTokenLists
+    // highestPriorityColor takes in a string in order to work with arrays and DOMTokenLists
     //  and then returns the highest priority color.
-    const colorPriority = (classListValue) => {
+    const highestPriorityColor = (classListValue) => {
       if (classListValue.includes('red-list')) {
         return 'red-list';
       }
@@ -88,8 +88,31 @@ export default class Controller {
         .split(' ')
         .filter(classItem => !classItem.includes(colorClass) && !(classItem.length === 0));
 
-      return colorPriority(filteredList.join(''));
+      return highestPriorityColor(filteredList.join(''));
     };
+
+    // const getNextColor = (classList, colorClass) => {
+    //   const filteredList = classList.value
+    //     .split(' ')
+    //     .filter(classItem => !classItem.includes(colorClass) && !(classItem.length === 0));
+
+    //   if (filteredList.includes('red-list')) {
+    //     return 'green-list';
+    //   }
+    //   if (filteredList.includes('green-list')) {
+    //     return 'blue-list';
+    //   }
+    //   if (filteredList.includes('blue-list')) {
+    //     return 'purple-list';
+    //   }
+    //   if (filteredList.includes('purple-list')) {
+    //     return 'grey-list';
+    //   }
+    //   // if (classListValue.includes('grey-list')) {
+    //   //   return 'grey-list';
+    //   // }
+    // };
+
 
     // _recursiveCheckHelper is the main method for storing the proper nodes to apply
     //   the hover-highlight effects to.
@@ -98,7 +121,7 @@ export default class Controller {
     //  - If the word also contains other color classes this method creates a secondary
     //    collection of nodes to remove the classes from, which removes their highlights.
     // 
-    const _recursiveCheckHelper = (currNode, colorClass, tempNodeCollectionOne, tempNodeCollectionTwo, nextOrPrevious) => {
+    const _recursiveCheckHelper = (currNode, colorClass, tempNodeCollectionOne, tempNodeCollectionTwo, nextOrPrevious, checkerCollection) => {
       let direction = '';
       let mainSuffix = '';
       let oppositeSuffix = '';
@@ -123,11 +146,12 @@ export default class Controller {
 
       const nextNode = currNode[direction];
       
+      
       console.log(`Helper ${nextOrPrevious} move with `, colorClass, ' Word: ', nextNode.textContent);
       // Skip the next node if the next node is whitepsace.
       if (nextNode.textContent === ' ') {
         console.log('SPACE found');
-        _recursiveCheckHelper(nextNode, colorClass, tempNodeCollectionOne, tempNodeCollectionTwo, nextOrPrevious);
+        _recursiveCheckHelper(nextNode, colorClass, tempNodeCollectionOne, tempNodeCollectionTwo, nextOrPrevious, checkerCollection);
         
         // If the node is in the middle of a phrase add it to tempCollection
         //  and CONTINUE recursion as we have not found end of the phrase.
@@ -135,15 +159,30 @@ export default class Controller {
                 ['!', '?', '.'].includes(nextNode.textContent)) {
         console.log('Word Not in Wordlist Found, OR End of Sentence. Stopping recursion');
       } else if (nextNode.classList.contains(`${colorClass}-middle`)) {
-        tempNodeCollectionOne.push(nextNode);
-        console.log('MIDDLE FOUND ', colorClass, nextNode.textContent);
-        _recursiveCheckHelper(nextNode, colorClass, tempNodeCollectionOne, tempNodeCollectionTwo, nextOrPrevious);
+        console.log('MIDDLE FOUND ', 'COLOR:', colorClass);
+        if (!(checkerCollection.includes(nextNode))) {
+          console.log('ADDED:', nextNode.textContent);
+          tempNodeCollectionOne.push(nextNode);
+        } else {
+          console.log('DUPLICATE NOT added', nextNode.textContent);
+        }
+        _recursiveCheckHelper(nextNode, colorClass, tempNodeCollectionOne, tempNodeCollectionTwo, nextOrPrevious, checkerCollection);
         
         // STOP recursion and ADD NODE as we have found the end of the phrase.
       } else if (nextNode.classList.contains(`${colorClass}-${mainSuffix}`)) {
-        tempNodeCollectionOne.push(nextNode);
-        console.log(`${nextOrPrevious} FOUND `, colorClass, nextNode.textContent);
-        console.log(tempNodeCollectionOne);
+        // IF span is NOT A DUPLICATE add it
+        // if (!(tempNodeCollectionOne.includes(nextNode))) {
+        //   console.log('/\/\/\/\/\ SPAN is not a duplicate', nextNode, tempNodeCollectionOne);
+        // } else {
+        //   console.log('/\/\/\/\/\ SPAN IS DUPE', nextNode, tempNodeCollectionOne);
+        // }
+        console.log('END of Phrase FOUND ', 'COLOR:', colorClass);
+        if (!(checkerCollection.includes(nextNode))) {
+          console.log('ADDED:', nextNode.textContent);
+          tempNodeCollectionOne.push(nextNode);
+        } else {
+          console.log('DUPLICATE NOT added', nextNode.textContent);
+        }
 
         // IF the LAST word in the phrase has a middle or right class then
         //  we know that this word is part of another phrase to the left
@@ -157,33 +196,35 @@ export default class Controller {
           //  and find the next priority color.
           console.log('++++++HIT MIDDLE OR OPPOSITE CLASS AT END OF PHRASE+++');
           console.log(nextPriorityColor);
-          _recursiveCheckHelper(nextNode, nextPriorityColor, tempNodeCollectionTwo, null, nextOrPrevious);
+          _recursiveCheckHelper(nextNode, nextPriorityColor, tempNodeCollectionTwo, null, nextOrPrevious, checkerCollection);
         }
       }
     };
 
-    const recursiveCheckRight = (node, color, mainNodeCollection, secondaryNodeCollection) => {
-      // Push first node to main collection if it is not null,
-      //  temporary solution for dealing with the beginning or end of sentences.
-      if (node) {
-        console.log('Added ', node.textContent);
-        mainNodeCollection.push(node);
+    const recursiveCheckRight = (node, color, optionalCheckCollection = []) => {
+      const mainNodeCollection = [];
+      const secondaryNodeCollection = [];
+
+      if (!node) {
+        return;
       }
       console.log('Going RIGHT before helper MAIN: ', mainNodeCollection);
-      _recursiveCheckHelper(node, color, mainNodeCollection, secondaryNodeCollection, 'next');
-
+      _recursiveCheckHelper(node, color, mainNodeCollection, secondaryNodeCollection, 'next', optionalCheckCollection);
+      console.log('END OF RIGHT: ', mainNodeCollection, secondaryNodeCollection);
       return { mainNodeCollection, secondaryNodeCollection }; //eslint-disable-line
     };
 
-    const recursiveCheckLeft = (node, color, mainNodeCollection, secondaryNodeCollection) => {
-      // Push first node to main collection if it is not null,
-      //  temporary solution tofor dealing with the beginning of or end of sentences.
-      if (node) {
-        console.log('Added ', node.textContent);
-        mainNodeCollection.push(node);
+    const recursiveCheckLeft = (node, color, optionalCheckCollection = []) => {
+      const mainNodeCollection = [];
+      const secondaryNodeCollection = [];
+      
+      if (!node) {
+        return;
       }
+
       console.log('Going LEFT before helper MAIN: ', mainNodeCollection);
-      _recursiveCheckHelper(node, color, mainNodeCollection, secondaryNodeCollection, 'previous');
+      _recursiveCheckHelper(node, color, mainNodeCollection, secondaryNodeCollection, 'previous', optionalCheckCollection);
+      console.log('END OF LEFT: ', mainNodeCollection, secondaryNodeCollection);
 
       return { mainNodeCollection, secondaryNodeCollection }; //eslint-disable-line
     };
@@ -212,7 +253,7 @@ export default class Controller {
         return colors.filter(color => color !== priorityColor);
       };
 
-      const mainColor = colorPriority(classList.value);
+      const mainColor = highestPriorityColor(classList.value);
       
       console.log('Added ', targetSpan.textContent);
       state.mainNodeCollection.push(targetSpan);
@@ -225,44 +266,53 @@ export default class Controller {
         console.log('TargetSpan has MORE than one class');
 
         const hoveredSpanColors = getSecondaryColors(classList.value, mainColor);
-        console.log(hoveredSpanColors);
+
+        let tempCollection = [];
 
         // If the current word is the left most word then look to the right
         //  to find the rest of the main phrase until we find the color's right class.
         if (classList.contains(`${mainColor}-left`)) {
           console.log('HOVERED Span has LEFT CLASS....');
-          recursiveCheckRight(targetSpan.nextElementSibling, mainColor, state.mainNodeCollection, state.secondaryNodeCollection);
-          console.log('State AFTER checkRight: ', state);
+          tempCollection = recursiveCheckRight(targetSpan.nextSibling, mainColor);
           // state.mainNodeCollection = state.mainNodeCollection.concat(tempCollection.mainNodeCollection);
           // state.secondaryNodeCollection = tempCollection.secondaryNodeCollection;
 
           // LOOK LEFT until finding left class and add the collection found to state.
         } else if (classList.contains(`${mainColor}-right`)) {
           console.log('HOVERED Span has RIGHT CLASS....');
-          recursiveCheckLeft(targetSpan.previousElementSibling, mainColor, state.mainNodeCollection, state.secondaryNodeCollection);
-          console.log('State AFTER checkLeft: ', state);
+          tempCollection = recursiveCheckLeft(targetSpan.previousSibling, mainColor);
           
         // For a word in the middle of a phrase we need to look LEFT & RIGHT
         //  until finding left & right class and add the collection found to state.
         } else if (classList.contains(`${mainColor}-middle`)) {
           console.log('HOVERED Span has MIDDLE CLASS....');
           // LOOK LEFT & RIGHT until finding both and adding to state
-          recursiveCheckRight(targetSpan.nextElementSibling, mainColor, state.mainNodeCollection, state.secondaryNodeCollection);
-          recursiveCheckLeft(targetSpan.previousElementSibling, mainColor, state.mainNodeCollection, state.secondaryNodeCollection);
+          tempCollection = recursiveCheckLeft(targetSpan.previousSibling, mainColor);
+          const secondTempCollection = recursiveCheckRight(targetSpan.nextSibling, mainColor);
+          
+          tempCollection.mainNodeCollection = tempCollection.mainNodeCollection.concat(secondTempCollection.mainNodeCollection);
+          
+          tempCollection.secondaryNodeCollection = tempCollection.secondaryNodeCollection.concat(secondTempCollection.secondaryNodeCollection);
         }
 
+        state.mainNodeCollection = state.mainNodeCollection.concat(tempCollection.mainNodeCollection);
+        state.secondaryNodeCollection = state.secondaryNodeCollection.concat(tempCollection.secondaryNodeCollection);
+        console.log('State AFTER Main Concat & BEFORE FILTER ', state.mainNodeCollection, state.secondaryNodeCollection);
+
         // Filter out main color from colors and do ALL secondary collection work for each color
+        console.log(hoveredSpanColors);
+
         hoveredSpanColors.forEach(colorClass => {
           if (classList.contains(`${colorClass}-left`)) {
             console.log('HOVERED Span has LEFT SECONDARY CLASS in Color: ', colorClass);
-            recursiveCheckRight(targetSpan.nextElementSibling, colorClass, state.secondaryNodeCollection, null);
+            recursiveCheckRight(targetSpan.nextSibling, colorClass, state.mainNodeCollection);
             // state.secondaryNodeCollection = state.secondaryNodeCollection.concat(tempCollection.mainNodeCollection);
             // state.secondaryNodeCollection = tempCollection.secondaryNodeCollection;
 
             // LOOK LEFT until finding left class and add the collection found to state.
           } else if (classList.contains(`${colorClass}-right`)) {
             console.log('HOVERED Span has RIGHT SECONDARY CLASS in Color: ', colorClass);
-            recursiveCheckLeft(targetSpan.previousElementSibling, colorClass, state.secondaryNodeCollection, null);
+            recursiveCheckLeft(targetSpan.previousSibling, colorClass, state.mainNodeCollection);
             // state.secondaryNodeCollection = state.secondaryNodeCollection.concat(tempCollection.mainNodeCollection);
 
             // For a word in the middle of a phrase we need to look LEFT & RIGHT
@@ -270,10 +320,11 @@ export default class Controller {
           } else if (classList.contains(`${colorClass}-middle`)) {
             console.log('HOVERED Span has MIDDLE SECONDARY CLASS in Color: ', colorClass);
             // LOOK LEFT & RIGHT until finding both and adding to state
-            recursiveCheckRight(targetSpan.nextElementSibling, colorClass, state.secondaryNodeCollection, null);
-            recursiveCheckLeft(targetSpan.previousElementSibling, colorClass, state.secondaryNodeCollection, null);
-            // const leftCollection = recursiveCheckLeft(targetSpan.previousElementSibling, colorClass).mainNodeCollection;
-            // const rightCollection = recursiveCheckRight(targetSpan.nextElementSibling, colorClass).mainNodeCollection;
+            state.secondaryNodeCollection = state.secondaryNodeCollection.concat(recursiveCheckRight(targetSpan.nextSibling, colorClass, state.mainNodeCollection).mainNodeCollection);
+
+            state.secondaryNodeCollection = state.secondaryNodeCollection.concat(recursiveCheckLeft(targetSpan.previousSibling, colorClass, state.mainNodeCollection).mainNodeCollection);
+            // const leftCollection = recursiveCheckLeft(targetSpan.previousSibling, colorClass).mainNodeCollection;
+            // const rightCollection = recursiveCheckRight(targetSpan.nextSibling, colorClass).mainNodeCollection;
             // const tempMainCollection = leftCollection.concat(rightCollection);
             // state.secondaryNodeCollection = state.secondaryNodeCollection.concat(tempMainCollection);
           }
@@ -285,7 +336,12 @@ export default class Controller {
       //  Then change the class to have the hover effect.
 
       // Filter the collections for in case a span was added more than once
+      state.mainNodeCollection = state.mainNodeCollection.filter((node, index) => state.mainNodeCollection.indexOf(node) === index);
+      state.secondaryNodeCollection = state.secondaryNodeCollection.filter((node, index) => state.secondaryNodeCollection.indexOf(node) === index);
 
+      // REMOVE ANY duplicate spans from secondary collection that are in main collection
+      state.secondaryNodeCollection = state.secondaryNodeCollection.filter(node => !state.mainNodeCollection.includes(node));
+      
       
       console.log('STATE BEFORE CLASS CHANGE:');
       console.log('MAIN: ', state.mainNodeCollection);
@@ -316,7 +372,7 @@ export default class Controller {
 
       const { classList } = spanCollection[i];
 
-      const topColorClass = colorPriority(classList.value);
+      const topColorClass = highestPriorityColor(classList.value);
 
       spanCollection[i].addEventListener('mouseover', () => {
         console.log('Mouse OVER...', topColorClass, spanCollection[i], classList);

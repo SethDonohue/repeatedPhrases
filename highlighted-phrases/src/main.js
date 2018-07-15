@@ -57,9 +57,11 @@ const testWordLists = {
     'take',
     // 'we are cool',
     'unlikely',
+    'is it good',
   ],
   'green-list': [
     'adorable',
+    'is it good for',
     'will take stuff',
     'creative',
     'love',
@@ -67,6 +69,7 @@ const testWordLists = {
     // If the phrase begins with the same word as another lower priority
     //  phrase ends with it will work, but the opposite does not work.
     'new technology',
+    // 'will deliver new',
     // 'new technology dude',
     'three ten',
     'are not cool',
@@ -74,6 +77,7 @@ const testWordLists = {
     // 'puppy',
   ],
   'blue-list': [
+    'ten twenty',
     'an adorable puppy',
     'very unlikely',
     'aggressive',
@@ -91,6 +95,7 @@ const testWordLists = {
   'grey-list': [
     'very unlikely to leave',
     'cool to hang',
+    // 'new technology',
     'will deliver new',
     'one two three',
   ],
@@ -103,7 +108,7 @@ const testStringTwo = 'We expect our candidates to be action-oriented, aggressiv
 const shortTest = ' puppy an adorable. adorable an puppy. adorable puppy adorable. puppy. an adorable puppy.... adorable an puppy. puppy an adorable. an actionable item puppy actionable item an puppy';
 const shortTestTwo = 'very unlikely to leave very unlikely to! leave very unlikely to. leave very unlikely to? leave leave very unlikely to. leave very unlikely to? unlikey to leave very. leave very unlikely to. very unlikely to leave me alone';
 const shortTestThree = 'our arm';
-const shortTestFive = 'will deliver new technology dude. is not cool we are!!!! we are cool to hang. are not cool we are. cool we are not cool. three one two three! one two three ten!';
+const shortTestFive = 'will deliver new technology dude. is not cool we are!!!! we are cool to hang. are not cool we are. cool we are not cool. three one two three! one two three ten! three ten twenty.... what is it good for...';
 
 const controllerOne = new Controller('highlighter-target', testWordLists);
 controllerOne.renderHighlights(testString);
