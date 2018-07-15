@@ -24,14 +24,13 @@
 - Use .text() to get the words in these spans and then pass these words through a function to determine which phrase is hovered over.
 
 6.)
-- Apply css classes to each span/word depending on which phrases the word/span is in. (how to apply a css class to all words depending on which phrase they are?)
-  - create a function that traverses all sentences and for each span/word applies multiple css classes to the span for each phrase the word is in.
-    - needs a hashmap with keys that are css selectors to be added and phrase priority
-  - have a hashmap that contains each sentence.
-  - each setence in that hashmap contains another hashmap of each phrase in it
-- when mouseover a span grab the css classes of span and sentence p tag id.
+- Apply css classes to each span/word depending on which phrases the word/span is in.
+  - create a function that traverses all sentences and for each span/word applies multiple css classes to the span for each phrase the word is in based on it's neighbor words.
+  - have a hashmap that contains each word.
+- when mouseover a span grab the css classes of span and apply colors based on priority.
 - use those classes to determine which phrase the word/span is in and determine which phrase of those has the highest priority.
 - depending on which phrase is highest priority select all words with that css selector in JUSt that sentence, - apply a highlight color css style rule to those selected words.
+- remove the classes from the overlapping phrases associated with the hovered word.
 
 7.)
 - Give each sentence an id
