@@ -20,7 +20,6 @@
   --red-z-index: -1;
   --hover-box-shadow-thickness-left: -5px;
   --hover-box-shadow-thickness-right: 5px;
-  --primary-transition: .1s linear all;
 }
 
 main div {
@@ -33,7 +32,6 @@ span {
   border-radius: var(--highlighted-border-radius);
   box-sizing: border-box;
   position: relative;
-  transition: var(--primary-transition);
   background-clip: padding-box;
   -webkit-background-clip: padding-box;
 }
@@ -48,14 +46,12 @@ span {
   z-index: var(--grey-z-index);
   border-radius: var(--highlighted-border-radius); */
   background-color: var(--primary-grey-highlight);
-  transition: var(--primary-transition);
 }
 
 .grey-list-hover{
   color: white;
   background-color: var(--primary-grey-hover);
   /* box-shadow: -10px 0 0px 0px var(--primary-grey-hover), 10px 0 0px 0px var(--primary-grey-hover); */
-  transition: var(--primary-transition);
 }
 
 .grey-list-left:before{
@@ -68,7 +64,6 @@ span {
   z-index: var(--grey-z-index);
   border-radius: var(--highlighted-border-radius);
   box-shadow: 10px 0 0px 0px var(--primary-grey-highlight);
-  transition: var(--primary-transition);
 
 }
 
@@ -82,7 +77,6 @@ span {
   z-index: var(--grey-z-index);
   border-radius: var(--highlighted-border-radius);
   box-shadow: -10px 0 0px 0px var(--primary-grey-highlight), 10px 0 0px 0px var(--primary-grey-highlight);
-  transition: var(--primary-transition);
   
 }
 .grey-list-middle-hover:before{
@@ -95,7 +89,6 @@ span {
   z-index: var(--grey-z-index);
   border-radius: var(--highlighted-border-radius);
   box-shadow: var(--hover-box-shadow-thickness-left) 0 0px 0px var(--primary-grey-hover), var(--hover-box-shadow-thickness-right) 0 0px 0px var(--primary-grey-hover);
-  transition: var(--primary-transition);
 }
 
 .purple-list{
@@ -108,13 +101,11 @@ span {
   z-index: var(--purple-z-index);
   border-radius: var(--highlighted-border-radius); */
   background-color: var(--primary-purple-highlight);
-  transition: var(--primary-transition);
 }
 
 .purple-list-hover{
   color: white;
   background-color: var(--primary-purple-hover);
-  transition: var(--primary-transition);
 }
 
 .purple-list-left:before{
@@ -127,7 +118,6 @@ span {
   z-index: var(--purple-z-index);
   border-radius: var(--highlighted-border-radius);
   box-shadow: 10px 0 0px 0px var(--primary-purple-highlight);
-  transition: var(--primary-transition);
 }
 
 .purple-list-middle:before{
@@ -140,8 +130,6 @@ span {
   z-index:var(--purple-z-index);
   border-radius: var(--highlighted-border-radius);
   box-shadow: -10px 0 0px 0px var(--primary-purple-highlight), 10px 0 0px 0px var(--primary-purple-highlight);
-  /* transition: .25s linear all; */
-  transition: var(--primary-transition);
 }
 
 .purple-list-middle-hover:before{
@@ -154,7 +142,6 @@ span {
   z-index:var(--purple-z-index);
   border-radius: var(--highlighted-border-radius);
   box-shadow: var(--hover-box-shadow-thickness-left) 0 0px 0px var(--primary-purple-hover), var(--hover-box-shadow-thickness-right) 0 0px 0px var(--primary-purple-hover);
-  transition: var(--primary-transition);
 }
 
 .blue-list{
@@ -167,13 +154,11 @@ span {
   z-index: var(--blue-z-index);
   border-radius: var(--highlighted-border-radius); */
   background-color: var(--primary-blue-highlight);
-  transition: var(--primary-transition);
 }
 
 .blue-list-hover{
   color: white;
   background-color: var(--primary-blue-hover);
-  transition: var(--primary-transition);
 }
 
 .blue-list-left:before{
@@ -186,7 +171,6 @@ span {
   z-index: var(--blue-z-index);
   border-radius: var(--highlighted-border-radius);
   box-shadow: 10px 0 0px 0px var(--primary-blue-highlight);
-  transition: var(--primary-transition);
 }
 
 .blue-list-left-hover:before{
@@ -199,7 +183,6 @@ span {
   z-index: var(--blue-z-index);
   border-radius: var(--highlighted-border-radius);
   box-shadow: 10px 0 0px 0px var(--primary-blue-hover);
-  transition: var(--primary-transition);
 }
 
 .blue-list-middle:before{
@@ -212,8 +195,6 @@ span {
   z-index: var(--blue-z-index);
   border-radius: var(--highlighted-border-radius);
   box-shadow: -10px 0 0px 0px var(--primary-blue-highlight), 10px 0 0px 0px var(--primary-blue-highlight);
-  /* transition: .25s linear all; */
-  transition: var(--primary-transition);
 }
 
 .blue-list-middle-hover:before{
@@ -226,7 +207,6 @@ span {
   z-index: var(--blue-z-index);
   border-radius: var(--highlighted-border-radius);
   box-shadow: var(--hover-box-shadow-thickness-left) 0 0px 0px var(--primary-blue-hover), var(--hover-box-shadow-thickness-right) 0 0px 0px var(--primary-blue-hover);
-  transition: var(--primary-transition);
 }
 
 .green-list{
@@ -239,14 +219,12 @@ span {
   z-index: var(--green-z-index);
   border-radius: var(--highlighted-border-radius); */
   background-color: var(--primary-green-highlight);
-  transition: var(--primary-transition);
 }
 
 .green-list-hover{
   color: white;
   background-color: var(--primary-green-hover);
   /* box-shadow: -10px 0 0px 0px var(--primary-green-hover), 10px 0 0px 0px var(--primary-green-hover); */
-  transition: var(--primary-transition);
 }
 
 .green-list-left:before{
@@ -259,7 +237,6 @@ span {
   z-index: var(--green-z-index);
   border-radius: var(--highlighted-border-radius);
   box-shadow: 10px 0 0px 0px var(--primary-green-highlight);
-  transition: var(--primary-transition);
 }
 
 .green-list-middle:before{
@@ -272,8 +249,6 @@ span {
   z-index: var(--green-z-index);
   border-radius: var(--highlighted-border-radius);
   box-shadow: -10px 0 0px 0px var(--primary-green-highlight), 10px 0 0px 0px var(--primary-green-highlight);
-  /* transition: .25s linear all; */
-  transition: var(--primary-transition);
 }
 
 .green-list-middle-hover:before{
@@ -286,7 +261,6 @@ span {
   z-index: var(--green-z-index);
   border-radius: var(--highlighted-border-radius);
   box-shadow: var(--hover-box-shadow-thickness-left) 0 0px 0px var(--primary-green-hover), var(--hover-box-shadow-thickness-right) 0 0px 0px var(--primary-green-hover);
-  transition: var(--primary-transition);
 }
 
 .red-list{
@@ -299,13 +273,11 @@ span {
   z-index: var(--red-z-index);
   border-radius: var(--highlighted-border-radius); */
   background-color: var(--primary-red-highlight);
-  transition: var(--primary-transition);
 }
 
 .red-list-hover{
   color: white;
   background-color: var(--primary-red-hover);
-  transition: var(--primary-transition);
 }
 
 .red-list-left:before{
@@ -318,7 +290,6 @@ span {
   z-index: var(--red-z-index);
   border-radius: var(--highlighted-border-radius);
   box-shadow: 10px 0 0px 0px var(--primary-red-highlight);
-  transition: var(--primary-transition);
 }
 
 .red-list-middle:before{
@@ -331,8 +302,6 @@ span {
   z-index: var(--red-z-index);
   border-radius: var(--highlighted-border-radius);
   box-shadow: -10px 0 0px 0px var(--primary-red-highlight), 10px 0 0px 0px var(--primary-red-highlight);
-  /* transition: .25s linear all; */
-  transition: var(--primary-transition);
 }
 
 .red-list-middle-hover:before{
@@ -345,5 +314,4 @@ span {
   z-index: var(--red-z-index);
   border-radius: var(--highlighted-border-radius);
   box-shadow: var(--hover-box-shadow-thickness-left) 0 0px 0px var(--primary-red-hover), var(--hover-box-shadow-thickness-right) 0 0px 0px var(--primary-red-hover);
-  transition: var(--primary-transition);
 }

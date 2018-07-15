@@ -70,7 +70,7 @@ const testWordLists = {
     //  phrase ends with it will work, but the opposite does not work.
     'new technology',
     // 'will deliver new',
-    // 'new technology dude',
+    // 'new technology dude bro yah man sweet as all heck awesome sick coolio yeah',
     'three ten',
     'are not cool',
     // 'cool we are',
@@ -90,13 +90,14 @@ const testWordLists = {
     'our team',
     'radio',
     // 'are not cool',
-    'cool we are',
+    // 'cool we are',
   ],
   'grey-list': [
     'very unlikely to leave',
     'cool to hang',
-    // 'new technology',
     'will deliver new',
+    // 'new technology',
+    // 'we are the best company and this company is the company that can and will deliver new technology dude bro',
     'one two three',
   ],
 };
@@ -108,7 +109,7 @@ const testStringTwo = 'We expect our candidates to be action-oriented, aggressiv
 const shortTest = ' puppy an adorable. adorable an puppy. adorable puppy adorable. puppy. an adorable puppy.... adorable an puppy. puppy an adorable. an actionable item puppy actionable item an puppy';
 const shortTestTwo = 'very unlikely to leave very unlikely to! leave very unlikely to. leave very unlikely to? leave leave very unlikely to. leave very unlikely to? unlikey to leave very. leave very unlikely to. very unlikely to leave me alone';
 const shortTestThree = 'our arm';
-const shortTestFive = 'will deliver new technology dude. is not cool we are!!!! we are cool to hang. are not cool we are. cool we are not cool. three one two three! one two three ten! three ten twenty.... what is it good for...';
+const shortTestFive = 'we are the best company and this company is the company that can and will deliver new technology dude bro yah man sweet as all heck awesome sick coolio yeah. is not cool we are!!!! we are cool to hang. are not cool we are. cool we are not cool. three one two three! one two three ten! three ten twenty.... what is it good for...';
 
 const controllerOne = new Controller('highlighter-target', testWordLists);
 controllerOne.renderHighlights(testString);
