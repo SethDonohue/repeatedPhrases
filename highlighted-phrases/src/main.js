@@ -11,13 +11,13 @@ class Controller {
         this.wordMap[word.toLowerCase()] = {};
         this.wordMap[word.toLowerCase()].colors = [associatedColor];
       } else if (!this.wordMap[word.toLowerCase()].colors.includes(associatedColor)) {
-        // If the color array in wordMap does not already include the color add it
+        // If the color array in wordMap does not already include the color add it.
         this.wordMap[word.toLowerCase()].colors.push(associatedColor);
       }
     };
 
     // Add Phrase Length per Color to know how far to look
-    //  ahead when applying highlights
+    //  ahead when applying highlights.
     const addLengthToWordMap = (colorList, word, length = 1) => {
       const newProperty = `${colorList}Length`;
       const currLength = this.wordMap[word.toLowerCase()][newProperty];
@@ -31,6 +31,8 @@ class Controller {
     };
 
     // Add Word Index per Color to not apply incorrect class for highlights
+    //  as we need to know if the word we are looking at is in the beginning
+    //  of the phrase or not.
     const addIndexToWordMap = (colorList, word, index) => {
       const newProperty = `${colorList}Index`;
       this.wordMap[word.toLowerCase()][newProperty] = index;
@@ -45,7 +47,7 @@ class Controller {
           addColorToWordMap(string, colorList);
           addLengthToWordMap(colorList, string);
         } else {
-          // need to determine index of word in phrase, excluding spaces
+          // Add each property for each word to the map.
           for (let i = 0; i < words.length; i++) {
             addColorToWordMap(words[i], colorList);
             addLengthToWordMap(colorList, words[i], words.length);
@@ -216,14 +218,13 @@ class Controller {
         if (classList.contains(`${mainColor}-left`)) {
           tempCollection = recursiveCheck(targetSpan.nextSibling, mainColor, 'next');
 
-          // LOOK LEFT until finding left class and add the collection found to state.
+        // LOOK LEFT until finding left class and add the collection found to state.
         } else if (classList.contains(`${mainColor}-right`)) {
           tempCollection = recursiveCheck(targetSpan.previousSibling, mainColor, 'previous');
 
-          // For a word in the middle of a phrase we need to look LEFT & RIGHT
-          //  until finding left & right class and add the collection found to state.
+        // For a word in the middle of a phrase we need to look LEFT & RIGHT
+        //  until finding left & right class and add the collection found to state.
         } else if (classList.contains(`${mainColor}-middle`)) {
-          // LOOK LEFT & RIGHT until finding both and adding to state
           tempCollection = recursiveCheck(targetSpan.previousSibling, mainColor, 'previous');
           const secondTempCollection = recursiveCheck(targetSpan.nextSibling, mainColor, 'next');
 
@@ -233,7 +234,7 @@ class Controller {
           tempCollection.secondaryNodeCollection = tempCollection.secondaryNodeCollection
             .concat(secondTempCollection.secondaryNodeCollection);
 
-          // HOVERED word is a single word, but has multiple classes...
+        // HOVERED word is a single word, but has multiple classes...
         } else {
           tempCollection.mainNodeCollection = [];
 
@@ -243,8 +244,9 @@ class Controller {
 
           let thirdColor = getNextColor(classList, mainColor, secondColor);
 
-          // Safety Check for if this word is only in two phrases so it only has one more
-          //  color to prioritize.
+          // If this word is ONLY in two phrases it only has one more
+          //  color to prioritize so check for the same color left and right
+          //  else we assume that the colors are different.
           if (!thirdColor) {
             thirdColor = secondColor;
           }
@@ -258,22 +260,19 @@ class Controller {
         state.secondaryNodeCollection = state.secondaryNodeCollection
           .concat(tempCollection.secondaryNodeCollection);
 
-        // Filter out main color from colors and do ALL secondary collection work for each color
-
         remainingSpanColors.forEach(colorClass => {
           if (classList.contains(`${colorClass}-left`)) {
             state.secondaryNodeCollection = state.secondaryNodeCollection
               .concat(recursiveCheck(targetSpan.nextSibling, colorClass, 'next').mainNodeCollection);
 
-            // LOOK LEFT until finding left class and add the collection found to state.
+          // LOOK LEFT until finding left class and add the collection found to secondary state.
           } else if (classList.contains(`${colorClass}-right`)) {
             state.secondaryNodeCollection = state.secondaryNodeCollection
               .concat(recursiveCheck(targetSpan.previousSibling, colorClass, 'previous').mainNodeCollection);
 
-            // For a word in the middle of a phrase we need to look LEFT & RIGHT
-            //  until finding left & right class and add the collection found to state.
+          // For a word in the middle of a phrase we need to look LEFT & RIGHT
+          //  until finding left & right class and add the collection found to secondary state.
           } else if (classList.contains(`${colorClass}-middle`)) {
-            // LOOK LEFT & RIGHT until finding both and adding to state
             state.secondaryNodeCollection = state.secondaryNodeCollection
               .concat(recursiveCheck(targetSpan.nextSibling, colorClass, 'next').mainNodeCollection);
 
@@ -281,10 +280,8 @@ class Controller {
               .concat(recursiveCheck(targetSpan.previousSibling, colorClass, 'previous').mainNodeCollection);
           }
         });
-
-        // Has only one color and one class so it is a single word not in any other phrases.
       }
-      // Filter the collections for in case a span was added more than once
+      // Filter the collections in case a span was added more than once.
       state.mainNodeCollection = state.mainNodeCollection
         .filter((node, index) => state.mainNodeCollection.indexOf(node) === index);
 
@@ -293,7 +290,7 @@ class Controller {
 
       // REMOVE ANY duplicate spans from secondary collection that are in main collection
       //  to prevent them from having the wrong hover affect applied.
-      //  This happens when the secondary colors are looped over.
+      //  NOTE: This happens when there are secondary colors on the main phrase.
       state.secondaryNodeCollection = state.secondaryNodeCollection
         .filter(node => !state.mainNodeCollection.includes(node));
 
@@ -326,6 +323,7 @@ class Controller {
 
       const { classList } = spanCollection[i];
 
+      // NOT NEEDED....
       const topColorClass = highestPriorityColor(classList.value);
 
       spanCollection[i].addEventListener('mouseover', () => {
@@ -336,7 +334,6 @@ class Controller {
 
       // ADD mouseout listener to remove hover effects using stored original state.
       spanCollection[i].addEventListener('mouseout', () => {
-
         spanState.mainNodeCollection.forEach((span, index) => {
           const currClass = spanState.mainClassCollection[index];
           span.className = `${currClass}`;
@@ -437,7 +434,7 @@ class Controller {
               }
 
               trackedIndexes.push(k);
-              // Is the current word is not in the word map or does not have the current
+              // If the current word is not in the word map or does not have the current
               //  color associated with it then break this loop and move to the next word.
               if (!this.wordMap[nextWord] || !(this.wordMap[nextWord].colors.includes(currColor))) {
                 hasCommonNeighborColors = false;
@@ -558,6 +555,8 @@ const testWordLists = {
   'blue-list': [
     'ten twenty',
     'an adorable puppy',
+    'very unlikely tobe',
+    'very unlikely to',
     'very unlikely',
     'aggressive',
     'arm',
@@ -603,7 +602,7 @@ const testStringTwo = 'We expect our candidates to be action-oriented, aggressiv
 
 const shortTest = ' puppy an adorable. adorable an puppy. adorable puppy adorable. puppy. an adorable puppy.... adorable an puppy. puppy an adorable. an actionable item puppy actionable item an puppy';
 
-const repetativeTest = 'very unlikely to leave very unlikely to! leave very unlikely to. leave very unlikely leave? leave leave very unlikely to. leave leave unlikey to unlikely to very unlike very unlikely to? unlikey to leave very. leave very unlikely to. very unlikely to leave me alone';
+const repetativeTest = 'very unlikely to leave very unlikely to! leave very unlikely to. leave very unlikely leave? leave leave very unlikely to. leave leave unlikey to unlikely to very unlike very unlikely to? unlikey to leave very. leave very unlikely to. very unlikely to leave me alone. very unlikely tobe very unlikely to';
 
 const multipleInclusivePhrases = 'what is it good for... ?! one million three thousand nine hundred fifty eight point two?';
 

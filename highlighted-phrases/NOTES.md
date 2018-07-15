@@ -1,5 +1,7 @@
-#### Known Issues:
-- 
+### Known Issues:
+
+- Possibly can't have phrases starting with the same word in the same color list if one is longer than the other and is before the shorter phrase in the same list.
+  - FIX: Sort the given colors shortest to longest to make sure we always check for the longest possible phrase when coming accross a word that is in a color with as the colorLength property of the wordMap will be the longest possible.
 #### Improvements:
 - Add the whitepsace to the node's so that it can have the
   highlight effect with using the box shadown work around.
