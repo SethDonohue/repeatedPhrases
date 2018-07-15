@@ -38,6 +38,19 @@ span {
   background-color: var(--primary-grey-highlight);
 }
 
+.grey-list:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--grey-z-index);
+  border-radius: var(--highlighted-border-radius);
+  box-shadow: -3px 0 0px 0px var(--primary-grey-highlight), 3px 0 0px 0px var(--primary-grey-highlight);
+}
+
+
 .grey-list-hover{
   color: white;
   background-color: var(--primary-grey-hover);
@@ -92,6 +105,18 @@ span {
 
 .purple-list{
   background-color: var(--primary-purple-highlight);
+}
+
+.purple-list:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--purple-z-index);
+  border-radius: var(--highlighted-border-radius);
+  box-shadow: -3px 0 0px 0px var(--primary-purple-highlight), 3px 0 0px 0px var(--primary-purple-highlight);
 }
 
 .purple-list-hover{
@@ -150,6 +175,19 @@ span {
 .blue-list{
   background-color: var(--primary-blue-highlight);
 }
+
+.blue-list:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--blue-z-index);
+  border-radius: var(--highlighted-border-radius);
+  box-shadow: -3px 0 0px 0px var(--primary-blue-highlight), 3px 0 0px 0px var(--primary-blue-highlight);
+}
+
 
 .blue-list-hover{
   color: white;
@@ -220,6 +258,18 @@ span {
   background-color: var(--primary-green-highlight);
 }
 
+.green-list:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--green-z-index);
+  border-radius: var(--highlighted-border-radius);
+  box-shadow: -3px 0 0px 0px var(--primary-green-highlight), 3px 0 0px 0px var(--primary-green-highlight);
+}
+
 .green-list-hover{
   color: white;
   background-color: var(--primary-green-hover);
@@ -276,6 +326,17 @@ span {
 
 .red-list{
   background-color: var(--primary-red-highlight);
+}
+
+.red-list:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--red-z-index);
+  border-radius: var(--highlighted-border-radius);
   box-shadow: -3px 0 0px 0px var(--primary-red-highlight), 3px 0 0px 0px var(--primary-red-highlight);
 }
 
