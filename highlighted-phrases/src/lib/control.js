@@ -38,7 +38,6 @@ export default class Controller {
 
     Object.keys(wordLists).forEach(colorList => {
       wordLists[colorList].forEach(string => {
-        // TODO: may need to handle punctuation here?
         const words = string.split(' ');
 
         if (words.length < 2) {
@@ -255,7 +254,6 @@ export default class Controller {
 
           // Safety Check for if this word is only in two phrases so it only has one more
           //  color to prioritize.
-          //  TODO: Refactor this idea/logic to handle as many other colors...
           if (!thirdColor) {
             thirdColor = secondColor;
           }
@@ -419,22 +417,22 @@ export default class Controller {
         //  length of the current word from the wordMap and
         //  store those phrases to be applied later.
         for (let j = 0; j < currColors.length; j++) {
-          const currColor = this.wordMap[currWord].colors[j];
+          const currColor = currColors[j];
           const phraseLength = this.wordMap[currWord][`${currColor}Length`];
           const wordIndex = this.wordMap[currWord][`${currColor}Index`];
           
-          // IF this word is NOT at the beginning of the prhase or
-          //  a single word then skip this loop as it will have proper
-          //  classes applied by other first word work
+          // IF this word is NOT at the beginning of the phrase or
+          //  a single word then skip this iteration as it will 
+          //  already had the proper classes applied by previous work.
           if (wordIndex > 0) {
-            break;
+            continue; //eslint-disable-line
           }
 
           // Add the base class for this word if it is only in a a single word phrase.
           if (phraseLength === 1) {
             appliedColorClasses[i].push(currColor);
           } else {
-            // Skip if this word already has this color associated with it.
+            // Skip the Loop if this word already has this color associated with it.
             if (appliedColorClasses[i].includes(currColor)) {
               break;
             }
@@ -453,7 +451,6 @@ export default class Controller {
               let nextWord = words[k];
                 
               // Skip this word and move to next if it is whitespace or punctuation
-              //  TODO: CHANGE to regex below
               while (nextWord === ' ') {
                 k++;
                 endOfPhraseIndex++;
@@ -502,6 +499,7 @@ export default class Controller {
     // CREATE the word map so we can know how to highlight each word when
     //  dealing with the inputString.
     this.createWordMap(this.wordLists);
+    console.log(this.wordMap);
     
     const newHTML = this.compareNeighbors(inputString);
     const targetElement = document.getElementById(this.divTarget); // Assumption: The div is given as an #id

@@ -58,11 +58,11 @@ const testWordLists = {
     // 'we are cool',
     'unlikely',
     'is it good',
-    'fifty',
+    'nine',
   ],
   'green-list': [
     'adorable',
-    'is it good for',
+    'what is it good for',
     'will take stuff',
     'creative',
     'love',
@@ -71,12 +71,12 @@ const testWordLists = {
     //  phrase ends with it will work, but the opposite does not work.
     'new technology',
     // 'will deliver new',
-    // 'new technology dude bro yah man sweet as all heck awesome sick coolio yeah',
-    'three ten',
+    'new technology dude bro yah man sweet as all heck awesome sick coolio yeah',
+    // 'three ten',
     'are not cool',
     // 'cool we are',
     // 'puppy',
-    'fifty five',
+    'thousand nine hundred',
   ],
   'blue-list': [
     'ten twenty',
@@ -85,7 +85,7 @@ const testWordLists = {
     'aggressive',
     'arm',
     // 'leave me', // Since it is first in the phrase it causes 
-    'fifty five hundred',
+    'three thousand nine hundred fifty',
   ],
   'purple-list': [
     'do not cross',
@@ -94,42 +94,74 @@ const testWordLists = {
     'radio',
     // 'are not cool',
     // 'cool we are',
-    'eleventeen fifty five hundred thousand',
+    'million three thousand nine hundred fifty eight',
   ],
   'grey-list': [
     'very unlikely to leave',
     'cool to hang',
     'will deliver new',
     // 'new technology',
-    // 'we are the best company and this company is the company that can and will deliver new technology dude bro',
-    'one two three',
-    'million eleventeen fifty five hundred thousand and three',
+    'we are the best company and this company is the company that can and will deliver new technology dude bro',
+    // 'one two three',
+    'one million three thousand nine hundred fifty eight point two',
+  ],
+};
+
+const testWordListsTwo = {
+  'green-list': [
+    'we are the best company and this company is the company that can and will deliver new technology dude bro',
+  ],
+  'grey-list': [
+    'bro yah man sweet as all heck awesome sick coolio yeah',
+  ],
+};
+
+const testWordListsThree = {
+  'red-list': [
+    'we the',
+  ],
+  'purple-list': [
+    'the best',
   ],
 };
 
 const testString = 'we\'re very unlikely to leave an adorable puppy. We do not want alarming or aggressive candidates, our candidates should be action-oriented otherwise they will be asked to leave. At this company we are creative, love new technology, and our arm is very unlikely to go-to radio! We do not cross our team with a log file and we will deliver new technology with love as we are adorable...';
 
-const testStringTwo = 'We expect our candidates to be action-oriented, aggressive and have creative ideas for our team. You will deliver new technology and groundbreaking designs. new technology new technology ';
+const testStringTwo = 'We expect our candidates to be action-oriented, aggressive and have creative ideas for our team. You will deliver new technology and groundbreaking designs.';
 
 const shortTest = ' puppy an adorable. adorable an puppy. adorable puppy adorable. puppy. an adorable puppy.... adorable an puppy. puppy an adorable. an actionable item puppy actionable item an puppy';
-const shortTestTwo = 'very unlikely to leave very unlikely to! leave very unlikely to. leave very unlikely to? leave leave very unlikely to. leave very unlikely to? unlikey to leave very. leave very unlikely to. very unlikely to leave me alone';
-const shortTestThree = 'our arm';
-const shortTestFive = 'we are the best company and this company is the company that can and will deliver new technology dude bro yah man sweet as all heck awesome sick coolio yeah. is not cool we are!!!! we are cool to hang. are not cool we are. cool we are not cool. three one two three! one two three ten! three ten twenty.... what is it good for... ?! million eleventeen fifty five hundred thousand and three?';
+
+const repetativeTest = 'very unlikely to leave very unlikely to! leave very unlikely to. leave very unlikely leave? leave leave very unlikely to. leave leave unlikey to unlikely to very unlike very unlikely to? unlikey to leave very. leave very unlikely to. very unlikely to leave me alone';
+
+const multipleInclusivePhrases = 'what is it good for... ?! one million three thousand nine hundred fifty eight point two?';
+
+const longPhrasesTest = 'we are the best company and this company is the company that can and will deliver new technology dude bro yah man sweet as all heck awesome sick coolio yeah!';
+
+const shortHighPriorityOverLowPhrases = 'we the best!';
 
 const controllerOne = new Controller('highlighter-target', testWordLists);
 controllerOne.renderHighlights(testString);
 
-const controllerTwo = new Controller('highlighter-target-two', testWordLists);
+const controllerTwo = new Controller('highlighter-target-two', originalLists);
 controllerTwo.renderHighlights(testStringTwo);
 
 const controllerThree = new Controller('highlighter-target-three', testWordLists);
-controllerThree.renderHighlights(shortTestTwo);
+controllerThree.renderHighlights(repetativeTest);
 
 const controllerFour = new Controller('highlighter-target-four', testWordLists);
 controllerFour.renderHighlights(shortTest);
 
-const controllerFive = new Controller('highlighter-target-five', testWordLists);
-controllerFive.renderHighlights(shortTestFive);
+const controllerFiveOne = new Controller('highlighter-target-five-one', testWordLists);
+controllerFiveOne.renderHighlights(longPhrasesTest);
+
+const controllerFiveTwo = new Controller('highlighter-target-five-two', testWordListsTwo);
+controllerFiveTwo.renderHighlights(longPhrasesTest);
+
+const controllerFiveThree = new Controller('highlighter-target-five-three', testWordListsThree);
+controllerFiveThree.renderHighlights(shortHighPriorityOverLowPhrases);
+
+const controllerSix = new Controller('highlighter-target-six', testWordLists);
+controllerSix.renderHighlights(multipleInclusivePhrases);
 
 const controllerFINAL = new Controller('highlighter-target-final', originalLists);
 controllerFINAL.renderHighlights(testString);
