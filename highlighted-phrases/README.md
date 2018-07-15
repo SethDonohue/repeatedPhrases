@@ -10,4 +10,5 @@ When a word is hovered over it must only show the color of the highest priority 
  ```src/index.html```
  in chrome/firefox.
 
+(Note: This was developed using babel, watchify, and liver-server, but I had permissions issues when trying to do the final build. All code is in main.js and just opening the indext.html should show project.)
 #### Seth Donohue
