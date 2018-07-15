@@ -58,7 +58,7 @@ class Controller {
     });
   }
 
-  // addMouseListener adds listeners to each span which will control all the
+  // Add listeners to each span which to control all the
   //  logic for the hover effect on each span.
   addMouseListener(spanCollection) { // eslint-disable-line
 
@@ -125,29 +125,36 @@ class Controller {
       if (!currNode[direction]) return;
 
       const nextNode = currNode[direction];
-
+      
+      console.log(`2.) LOOKING TO ${direction} node: `, nextNode.textContent);
       // Skip the next node if the next node is whitepsace.
       if (nextNode.textContent === ' ') {
+        console.log(`3.) Node is a SPACE, skip to ${direction} node`);
         _recursiveCheckHelper(nextNode, colorClass, tempNodeCollectionOne, tempNodeCollectionTwo, nextOrPrevious, flag);
 
-      // Skip the next node if it contains a word that is not in the word map or is
+      // STOP recursive call if the next node contains a word that is not in the word map or is
       //  at the end of the sentence.
-      //  If the textConent has whitepsace it is a node between two spans and can be skipped.
+      //  If the textConent has whitepsace it is a node between two spans.
       //  NOTE: textContent of a text node includes the whitespace around it.
       } else if (nextNode.textContent.includes(' ') ||
         ['!', '?', '.'].includes(nextNode.textContent)) {
+        //  TODO: REMOVE this else-if as it is never visited because nodes like these
+        //  DO NOT have a class associated with them per how the spans were initialized.
+        //  We only need to worry aobut spaces and take care of that above.
 
       // If the node is in the middle of a phrase add it to tempCollection
       //  and CONTINUE recursion as we have not found end of the phrase.
       } else if (nextNode.classList.contains(`${colorClass}-middle`)) {
         tempNodeCollectionOne.push(nextNode);
+        console.log(`3.) ADDED to state: __${nextNode.textContent.toUpperCase()}__`);
         _recursiveCheckHelper(nextNode, colorClass, tempNodeCollectionOne, tempNodeCollectionTwo, nextOrPrevious, flag);
-
-      // STOP recursion and ADD NODE as we have found the end of the phrase.
+        
+        // STOP recursion and ADD NODE as we have found the end of the phrase.
       } else if (nextNode.classList.contains(`${colorClass}-${mainSuffix}`)) {
         tempNodeCollectionOne.push(nextNode);
+        console.log(`3.) ADDED to state: __${nextNode.textContent.toUpperCase()}__`);
 
-        // IF the LAST word in the phrase has a middle or right class then
+        // IF the LAST word in the MAIN phrase has a middle or right class then
         //  we know that this word is part of another phrase to the left
         //  so we need to traverse its siblings and save them to the
         //  secondary collection.
@@ -204,8 +211,10 @@ class Controller {
       const mainColor = highestPriorityColor(classList.value);
 
       state.mainNodeCollection.push(targetSpan);
+      console.log(`1.) ADDED Hovered node to state: __${targetSpan.textContent.toUpperCase()}__`);
 
       // Is in multiple colors or a phrase (more than one word);
+      //  If false then it is an isolated word.
       if (classList.length >= 2) {
         const remainingSpanColors = getSecondaryColors(classList.value, mainColor);
 
@@ -292,6 +301,10 @@ class Controller {
       state.secondaryNodeCollection = state.secondaryNodeCollection
         .filter(node => !state.mainNodeCollection.includes(node));
 
+      console.log('-------- STATE AFTER Recursion: ');
+      console.log('Main Nodes: ', state.mainNodeCollection);
+      console.log('Secondary Nodes: ', state.secondaryNodeCollection);
+      
       // Take the main collection and push the elements class to a stored state
       //  so we can undo the highlights on mouseout.
       //  Then change the class to have the hover effect.
@@ -308,6 +321,8 @@ class Controller {
           span.className = '';
         });
       }
+      console.log('Main Classes: ', state.mainClassCollection);
+      console.log('Secondary Classes: ', state.secondaryClassCollection);
     };
 
     for (let i = 0; i < spanCollection.length; i++) {
@@ -327,6 +342,13 @@ class Controller {
       spanCollection[i].addEventListener('mouseover', () => {
         // Check which part of the phrase the class is in and apply the 
         //  appropriate classes to it.
+
+        console.log('++++++++ STATE Before Hover: ');
+        console.log('Main Nodes: ', spanState.mainNodeCollection);
+        console.log('Main Classes: ', spanState.mainClassCollection);
+        console.log('Secondary Nodes: ', spanState.secondaryNodeCollection);
+        console.log('Secondary Classes: ', spanState.secondaryClassCollection);
+
         mouseOverClassApplier(spanCollection[i], classList, spanState);
       });
 
@@ -553,8 +575,6 @@ const testWordLists = {
   'blue-list': [
     'ten twenty',
     'an adorable puppy',
-    'very unlikely tobe',
-    'very unlikely to',
     'very unlikely',
     'aggressive',
     'arm',
