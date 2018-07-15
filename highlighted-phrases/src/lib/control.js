@@ -237,9 +237,11 @@ export default class Controller {
           tempCollection = recursiveCheck(targetSpan.previousSibling, mainColor, 'previous');
           const secondTempCollection = recursiveCheck(targetSpan.nextSibling, mainColor, 'next');
 
-          tempCollection.mainNodeCollection = tempCollection.mainNodeCollection.concat(secondTempCollection.mainNodeCollection);
+          tempCollection.mainNodeCollection = tempCollection.mainNodeCollection
+            .concat(secondTempCollection.mainNodeCollection);
           
-          tempCollection.secondaryNodeCollection = tempCollection.secondaryNodeCollection.concat(secondTempCollection.secondaryNodeCollection);
+          tempCollection.secondaryNodeCollection = tempCollection.secondaryNodeCollection
+            .concat(secondTempCollection.secondaryNodeCollection);
 
         // HOVERED word is a single word, but has multiple classes...
         } else {
@@ -309,9 +311,9 @@ export default class Controller {
 
       // REMOVE ANY duplicate spans from secondary collection that are in main collection
       //  to prevent them from having the wrong hover affect applied.
+      //  This happens when the secondary colors are looped over.
       state.secondaryNodeCollection = state.secondaryNodeCollection
         .filter(node => !state.mainNodeCollection.includes(node));
-      
 
       console.log('MAIN:', state.mainNodeCollection);
       console.log('SECONDARY:', state.secondaryNodeCollection);
@@ -333,9 +335,8 @@ export default class Controller {
       }
     };
 
-
     for (let i = 0; i < spanCollection.length; i++) {
-      // Store the Original State of each span to use for mouseout listener
+      // Store the original state of each span to use for mouseout listener.
       const spanState = {
         mainNodeCollection: [],
         mainClassCollection: [],

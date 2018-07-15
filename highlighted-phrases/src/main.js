@@ -1,5 +1,3 @@
-'use strict';
-
 import Controller from './lib/control';
 
 console.log('Hello world...');
@@ -49,13 +47,11 @@ const testWordLists = {
     'action-oriented',
     'alarming',
     'candidates',
-    // 'very',
     'leave',
     'do not want',
     'do care',
     'actionable',
     'take',
-    // 'we are cool',
     'unlikely',
     'is it good',
     'nine',
@@ -67,15 +63,9 @@ const testWordLists = {
     'creative',
     'love',
     'groundbreaking',
-    // If the phrase begins with the same word as another lower priority
-    //  phrase ends with it will work, but the opposite does not work.
     'new technology',
-    // 'will deliver new',
     'new technology dude bro yah man sweet as all heck awesome sick coolio yeah',
-    // 'three ten',
     'are not cool',
-    // 'cool we are',
-    // 'puppy',
     'thousand nine hundred',
   ],
   'blue-list': [
@@ -84,7 +74,6 @@ const testWordLists = {
     'very unlikely',
     'aggressive',
     'arm',
-    // 'leave me', // Since it is first in the phrase it causes 
     'three thousand nine hundred fifty',
   ],
   'purple-list': [
@@ -92,17 +81,13 @@ const testWordLists = {
     'log file',
     'our team',
     'radio',
-    // 'are not cool',
-    // 'cool we are',
     'million three thousand nine hundred fifty eight',
   ],
   'grey-list': [
     'very unlikely to leave',
     'cool to hang',
     'will deliver new',
-    // 'new technology',
     'we are the best company and this company is the company that can and will deliver new technology dude bro',
-    // 'one two three',
     'one million three thousand nine hundred fifty eight point two',
   ],
 };
