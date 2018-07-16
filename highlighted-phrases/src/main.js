@@ -126,10 +126,8 @@ class Controller {
 
       const nextNode = currNode[direction];
       
-      console.log(`2.) LOOKING TO ${direction} node: `, nextNode.textContent);
       // Skip the next node if the next node is whitepsace.
       if (nextNode.textContent === ' ') {
-        console.log(`3.) Node is a SPACE, skip to ${direction} node`);
         _recursiveCheckHelper(nextNode, colorClass, tempNodeCollectionOne, tempNodeCollectionTwo, nextOrPrevious, flag);
 
       // STOP recursive call if the next node contains a word that is not in the word map or is
@@ -146,13 +144,11 @@ class Controller {
       //  and CONTINUE recursion as we have not found end of the phrase.
       } else if (nextNode.classList.contains(`${colorClass}-middle`)) {
         tempNodeCollectionOne.push(nextNode);
-        console.log(`3.) ADDED to state: __${nextNode.textContent.toUpperCase()}__`);
         _recursiveCheckHelper(nextNode, colorClass, tempNodeCollectionOne, tempNodeCollectionTwo, nextOrPrevious, flag);
         
         // STOP recursion and ADD NODE as we have found the end of the phrase.
       } else if (nextNode.classList.contains(`${colorClass}-${mainSuffix}`)) {
         tempNodeCollectionOne.push(nextNode);
-        console.log(`3.) ADDED to state: __${nextNode.textContent.toUpperCase()}__`);
 
         // IF the LAST word in the MAIN phrase has a middle or right class then
         //  we know that this word is part of another phrase to the left
@@ -211,7 +207,6 @@ class Controller {
       const mainColor = highestPriorityColor(classList.value);
 
       state.mainNodeCollection.push(targetSpan);
-      console.log(`1.) ADDED Hovered node to state: __${targetSpan.textContent.toUpperCase()}__`);
 
       // Is in multiple colors or a phrase (more than one word);
       //  If false then it is an isolated word.
@@ -301,9 +296,6 @@ class Controller {
       state.secondaryNodeCollection = state.secondaryNodeCollection
         .filter(node => !state.mainNodeCollection.includes(node));
 
-      console.log('-------- STATE AFTER Recursion: ');
-      console.log('Main Nodes: ', state.mainNodeCollection);
-      console.log('Secondary Nodes: ', state.secondaryNodeCollection);
       
       // Take the main collection and push the elements class to a stored state
       //  so we can undo the highlights on mouseout.
@@ -321,8 +313,6 @@ class Controller {
           span.className = '';
         });
       }
-      console.log('Main Classes: ', state.mainClassCollection);
-      console.log('Secondary Classes: ', state.secondaryClassCollection);
     };
 
     for (let i = 0; i < spanCollection.length; i++) {
@@ -343,11 +333,6 @@ class Controller {
         // Check which part of the phrase the class is in and apply the 
         //  appropriate classes to it.
 
-        console.log('++++++++ STATE Before Hover: ');
-        console.log('Main Nodes: ', spanState.mainNodeCollection);
-        console.log('Main Classes: ', spanState.mainClassCollection);
-        console.log('Secondary Nodes: ', spanState.secondaryNodeCollection);
-        console.log('Secondary Classes: ', spanState.secondaryClassCollection);
 
         mouseOverClassApplier(spanCollection[i], classList, spanState);
       });
@@ -384,6 +369,7 @@ class Controller {
     for (let i = 0; i < words.length; i++) {
       appliedColorClasses.push([]);
     }
+    console.log(`1.) \n Words Array: ${words}`);
 
     // This method compares where the word's index with the part of the phrase we are
     //  at to determine which class suffix should be applied.
@@ -463,8 +449,11 @@ class Controller {
             }
             // If flag is still true then add the class to appliedClases array.
             if (hasCommonNeighborColors) {
+              console.log(`2.) ADDED SPAN for __${currWord}__ withcolor __${currColor}__ `);
               trackedIndexes.forEach(index => {
                 const tempClass = `${currColor}${isWordAtBeginningOrEnd(index, i, endOfPhraseIndex)}`;
+                
+                console.log(`3.) ADDED Class of __${tempClass}__`);
                 appliedColorClasses[index].push(tempClass);
                 appliedColorClasses[index].push(currColor);
               });
