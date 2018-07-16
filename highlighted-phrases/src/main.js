@@ -666,8 +666,8 @@ controllerFiveThree.renderHighlights(shortHighPriorityOverLowPhrases);
 const controllerSix = new Controller('highlighter-target-six', testWordLists);
 controllerSix.renderHighlights(multipleInclusivePhrases);
 
-const controllerSeven = new Controller('highlighter-target-seven', testWordListsFour);
-controllerSeven.renderHighlights(pyramidRecusriveTestString);
+// const controllerSeven = new Controller('highlighter-target-seven', testWordListsFour);
+// controllerSeven.renderHighlights(pyramidRecusriveTestString);
 
 const controllerFINAL = new Controller('highlighter-target-final', originalLists);
 controllerFINAL.renderHighlights(testString);
