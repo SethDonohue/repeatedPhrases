@@ -14,6 +14,7 @@ class Controller {
         // If the color array in wordMap does not already include the color add it.
         this.wordMap[word.toLowerCase()].colors.push(associatedColor);
       }
+      console.log(`ADDED ${associatedColor} property to ${word.toLowerCase()}.`);
     };
 
     // Add Phrase Length per Color to know how far to look
@@ -24,9 +25,11 @@ class Controller {
       if (currLength) {
         if (length > currLength) {
           this.wordMap[word.toLowerCase()][newProperty] = length;
+          console.log(`ADDED ${newProperty}: ${length} property to __${word.toLowerCase()}__`);
         }
       } else {
         this.wordMap[word.toLowerCase()][newProperty] = length;
+        console.log(`ADDED ${newProperty}: ${length} property to __${word.toLowerCase()}__`);
       }
     };
 
@@ -36,6 +39,7 @@ class Controller {
     const addIndexToWordMap = (colorList, word, index) => {
       const newProperty = `${colorList}Index`;
       this.wordMap[word.toLowerCase()][newProperty] = index;
+      console.log(`ADDED ${word.toLowerCase()} to wordMap.`);
     };
 
     Object.keys(wordLists).forEach(colorList => {
@@ -633,9 +637,11 @@ controllerFiveTwo.renderHighlights(longPhrasesTest);
 
 const controllerFiveThree = new Controller('highlighter-target-five-three', testWordListsThree);
 controllerFiveThree.renderHighlights(shortHighPriorityOverLowPhrases);
+console.log('Controller Five-Three Word Map: ', controllerFiveThree.wordMap);
 
 const controllerSix = new Controller('highlighter-target-six', testWordLists);
 controllerSix.renderHighlights(multipleInclusivePhrases);
 
 const controllerFINAL = new Controller('highlighter-target-final', originalLists);
 controllerFINAL.renderHighlights(testString);
+console.log('Controller FINAL Word Map: ', controllerFINAL.wordMap);
