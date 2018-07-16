@@ -603,6 +603,31 @@ const testWordListsThree = {
   ],
 };
 
+const testWordListsFour = {
+  'red-list': [
+    'we are the',
+  ],
+  'green-list': [
+    'the best company',
+    'what we',
+  ],
+  'blue-list': [
+    'company in the world',
+    'this is what',
+  ],
+  'purple-list': [
+    'world for sure',
+    'listen to this',
+  ],
+  'grey-list': [
+    'sure definitely',
+    // 'can you listen to this is what we are the best company in the world for sure definitely',
+    'can you listen',
+  ],
+};
+
+const pyramidRecusriveTestString = 'can you listen to this is what we are the best company in the world for sure definitely.';
+
 const testString = 'we\'re very unlikely to leave an adorable puppy. We do not want alarming or aggressive candidates, our candidates should be action-oriented otherwise they will be asked to leave. At this company we are creative, love new technology, and our arm is very unlikely to go-to radio! We do not cross with our team do not cross our team with a log file and we will deliver new technology with love as we are adorable...';
 
 const testStringTwo = 'We expect our candidates to be action-oriented, aggressive and have creative ideas for our team. You will deliver new technology and groundbreaking designs.';
@@ -640,6 +665,9 @@ controllerFiveThree.renderHighlights(shortHighPriorityOverLowPhrases);
 
 const controllerSix = new Controller('highlighter-target-six', testWordLists);
 controllerSix.renderHighlights(multipleInclusivePhrases);
+
+const controllerSeven = new Controller('highlighter-target-seven', testWordListsFour);
+controllerSeven.renderHighlights(pyramidRecusriveTestString);
 
 const controllerFINAL = new Controller('highlighter-target-final', originalLists);
 controllerFINAL.renderHighlights(testString);
